@@ -35,5 +35,9 @@ This app generates NY Times-style mini crossword puzzles. Users log in with thei
 
 ## ERD
 
+![ERD](https://github.com/aefritz/crossword-game/blob/master/Crossword_ERD.jpg)
 
 ## Wireframes
+![Landing Page](https://github.com/aefritz/crossword-game/blob/master/CrosswordLandingPage.jpeg)
+![User View](https://github.com/aefritz/crossword-game/blob/master/CrosswordUserView.jpeg)
+![Gameplay](https://github.com/aefritz/crossword-game/blob/master/CrosswordPlay.jpeg)
