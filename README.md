@@ -29,7 +29,7 @@ This app generates NY Times-style mini crossword puzzles. Users log in with thei
 
 - Monday: Backend framework as validated by Facebook / Game logic
 - Tuesday: game logic and puzzleboard interactivity
-- Wednesday: Game logic
+- Wednesday: Puzzleboard interactivity
 - Thursday: Styling
 - Friday: Styling
 
