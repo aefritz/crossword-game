@@ -1,29 +1,29 @@
 {
   "name": "crossword",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.18.0",
-    "fb": "^2.0.0",
-    "query-string": "^6.4.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8"
-  },
+  "version": "1.0.0",
+  "description": "This app generates NY Times-style mini crossword puzzles. Users log in with their Facebook accounts and can save and share their performance on Facebook with their friends.",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aefritz/crossword-game.git"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aefritz/crossword-game/issues"
+  },
+  "homepage": "https://github.com/aefritz/crossword-game#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "fb": "^2.0.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.10",
+    "sequelize": "^5.2.12"
+  }
 }
