@@ -2,12 +2,6 @@ import React from 'react';
 import queryString from 'query-string';
 import {Facebook, FacebookApiException} from 'fb';
 const fb = new Facebook();
-const options = fb.options({
-  appId: '406373586828876',
-  appSecret: '49ef2134cedfd3e8b0e5007b6e4e156a',
-  redirectUri: 'http://localhost:3000/'
-});
-
 
 function LoginFlow (props) {
   let {accessToken, exchangeCodeForToken, setToken, url} = props;

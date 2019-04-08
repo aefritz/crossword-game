@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import './App.css';
 import LoginFlow from './components/LoginFlow';
 import Gameboard from './components/Gameboard';
+import {getUser, createUser} from './services';
 let appid = process.env.REACT_APP_APP_ID;
 let appsecret = process.env.REACT_APP_APP_SECRET;
 
@@ -30,7 +31,8 @@ class App extends Component {
       token_set: false,
       accessToken: "",
       redirectURL: "",
-      expires: ""
+      expires: "",
+      currentUser: null
     }
     this.exchangeCodeForToken = this.exchangeCodeForToken.bind(this);
     this.setToken = this.setToken.bind(this);
@@ -90,10 +92,13 @@ class App extends Component {
     await fb.api('me', { fields: ['email'], access_token: token }, function (res) {
       console.log(res);
     });
+    let resp = await getUser(token);
+    console.log(resp.data);
     this.setState({
       data: crossword_data,
       redirectURL: url,
-      accessToken: token
+      accessToken: token,
+      currentUser: resp.data
     });
   }
 
