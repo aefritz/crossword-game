@@ -22,13 +22,13 @@ This app generates NY Times-style mini crossword puzzles. Users log in with thei
 
 - Option to log in without Facebook... or option to log in with other platforms.
 - Integrating clues from previous NY Times Crosswords. There is no API but there is a JSON database -- I would need to think about how to unpack all of the data. The other problem with Times questions is that some/many are self-referential.
-- Optimizing generation performance - this algorithm might be complicated and I'm going
+- Optimizing generation performance - this algorithm might be complicated and I might have to settle for less than ideal results given the complexity and the timeframe. However, I like this challenge of the project.
 - Attempting the backend in Ruby (I would like to see this in action)
 
 ## Timeline
 
-- Monday: Backend framework as validated by Facebook / Puzzleboard interactivity
-- Tuesday: Puzzleboard interactivity and game logic
+- Monday: Backend framework as validated by Facebook / Game logic
+- Tuesday: game logic and puzzleboard interactivity
 - Wednesday: Game logic
 - Thursday: Styling
 - Friday: Styling
