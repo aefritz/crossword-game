@@ -11,7 +11,7 @@ class Gameboard extends Component {
           definition: ""},
         {
           word:"",
-          defintion: ""},
+          definition: ""},
         {
           word:"",
           definition: ""}
@@ -29,6 +29,9 @@ class Gameboard extends Component {
       selectedPosition: {x: null, y: null},
       toggleDirection: '',
       currentDefinition: '',
+      win: false,
+      timer: null,
+      game_time: 0,
       positions: [
         [{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''}],
         [{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''}],
@@ -122,14 +125,19 @@ class Gameboard extends Component {
       let resp = await getWordDef(word);
       return resp;
     }));
+    let timer = window.setInterval(()=>{
+      console.log('bleep');
+      document.querySelector('#timer').innerText = (parseInt(document.querySelector('#timer').innerText) + 1) + "s";
+    },1000);
     this.setState(prevState => ({
       ...prevState,
+      timer: timer,
       words: {across: [
           {word: wordArray[0],
           definition: definitionArray[0]},
         {
           word: wordArray[1],
-          defintion: definitionArray[1]},
+          definition: definitionArray[1]},
         {
           word: wordArray[2],
           definition: definitionArray[2]}
@@ -151,19 +159,32 @@ class Gameboard extends Component {
         [{letter:'', answer: wordArray[3][3]},{letter:'', answer:''},{letter:'', answer:wordArray[4][3]},{letter:'', answer:''},{letter:'', answer:wordArray[5][3]}],
         [{letter:'', answer: wordArray[3][4]},{letter:'', answer: wordArray[2][1]},{letter:'', answer:wordArray[2][2]},{letter:'', answer:wordArray[2][3]},{letter:'', answer: wordArray[2][4]}]
       ],
-    }))
+    }));
   }
 
 
   handleChange(ev) {
-    const {name, value} = ev.target;
+    const {value} = ev.target;
+    let winStatus;
+    const x = parseInt(ev.target.dataset.x);
+    const y = parseInt(ev.target.dataset.y);
+    console.log(x,y,value);
+    const positions = this.state.positions;
+    positions[y][x].letter = value;
     this.setState(prevState => ({
       ...prevState,
-      formValue: {
-        ...prevState.formValue,
-        [name]: value
-      }
-    }));
+      positions: positions}))
+    if (this.state.positions.every(a => a.every(b => b.letter === b.answer))) {
+      window.clearInterval(this.state.timer);
+      console.log('winner');
+      let game_time = parseInt(document.querySelector('#timer').innerText);
+      this.setState(prevState => ({
+        ...prevState,
+        game_time: game_time,
+        win: true,
+        timer: null
+      }))
+    }
   }
 
   handleFocus(ev) {
@@ -197,7 +218,7 @@ class Gameboard extends Component {
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'down',
-        currentDefinition: this.state.words.down[selector]
+        currentDefinition: this.state.words.down[selector].definition
       }))
     } else if (((x === "1") || (x === "3"))) {
       document.querySelectorAll(`[data-y = '${y}']`).forEach(element => element.className = 'rowHighlight');
@@ -206,16 +227,18 @@ class Gameboard extends Component {
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'across',
-        currentDefinition: this.state.words.across[selector]
+        currentDefinition: this.state.words.across[selector].definition
       }))
     } else if (((x === "0") || (x === "2") || ( x=== "4")) && ((y === "0") || (y === "2") || (y === "4"))  && this.state.toggleDirection === 'down') {
+      console.log('triggered');
       document.querySelectorAll(`[data-y = '${y}']`).forEach(element => element.className = 'rowHighlight');
       const selector = parseInt(y)/2;
       console.log(this.state.words.across[selector]);
+      console.log(this.state.words.across[selector].definition);
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'across',
-        currentDefinition: this.state.words.across[selector]
+        currentDefinition: this.state.words.across[selector].definition
       }))
     } else if (((x === "0") || (x === "2") || ( x=== "4")) && ((y === "0") || (y === "2") || (y === "4")) && this.state.toggleDirection === 'across') {
       document.querySelectorAll(`[data-x = '${x}']`).forEach(element => element.className = 'rowHighlight');
@@ -224,7 +247,7 @@ class Gameboard extends Component {
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'down',
-        currentDefinition: this.state.words.down[selector]
+        currentDefinition: this.state.words.down[selector].definition
       }))
     } else if (((x === "0") || (x === "2") || ( x=== "4")) && ((y === "1") || (y === "3"))) {
       document.querySelectorAll(`[data-x = '${x}']`).forEach(element => element.className = 'rowHighlight');
@@ -233,7 +256,7 @@ class Gameboard extends Component {
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'down',
-        currentDefinition: this.state.words.down[selector]
+        currentDefinition: this.state.words.down[selector].definition
       }))
     }
   }
@@ -256,9 +279,10 @@ class Gameboard extends Component {
   render() {
     return (
       <div>
-
       <form>
-        <div className="container" onClick={this.handleClick}>
+        <textarea value={this.state.currentDefinition} className='clue'></textarea>
+        <p id='timer'>0</p>
+        <div className="container" onClick={this.handleClick} onChange={this.handleChange}>
 
           <div className="space" data-x="0" data-y="0" >
             <input className="space" type='text'  data-x="0" data-y="0"  value={this.state.positions[0][0].letter} onFocus={this.handleFocus}></input>
@@ -284,7 +308,7 @@ class Gameboard extends Component {
             <input className="space" type='text' data-x="0" data-y="1" value={this.state.positions[1][0].letter} onFocus={this.handleFocus}></input>
           </div>
 
-          <div className="space" data-x="1" data-y="1">
+          <div className="dark_space" data-x="1" data-y="1">
 
           </div>
 
@@ -292,7 +316,7 @@ class Gameboard extends Component {
             <input className="space" type='text' data-x="2" data-y="1" value={this.state.positions[1][2].letter} onFocus={this.handleFocus}></input>
           </div>
 
-          <div className="space" data-x="3" data-y="1">
+          <div className="dark_space" data-x="3" data-y="1">
 
           </div>
 
@@ -324,7 +348,7 @@ class Gameboard extends Component {
             <input className="space" type='text' data-x="0" data-y="3" value={this.state.positions[3][0].letter} onFocus={this.handleFocus}></input>
           </div>
 
-          <div className="space" data-x="1" data-y="3">
+          <div className="dark_space" data-x="1" data-y="3">
 
           </div>
 
@@ -332,7 +356,7 @@ class Gameboard extends Component {
             <input className="space" type='text' data-x="2" data-y="3" value={this.state.positions[3][2].letter} onFocus={this.handleFocus}></input>
           </div>
 
-          <div className="space" data-x="3" data-y="3">
+          <div className="dark_space" data-x="3" data-y="3">
 
           </div>
 

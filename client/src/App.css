@@ -6,20 +6,22 @@
 .container {
   margin: 0 auto;
   width: 370px;
-  height: 370px;
+  height: 335px;
   display: flex;
   flex-wrap: wrap;
   padding: 0px;
 }
 .space {
-  margin: 5px;
+  margin: 0px;
+  font-size: 30px;
   width: 60px;
   height: 60px;
   border-radius: 5%;
   border: 2px solid black;
 }
 .selected {
-  margin: 5px;
+  margin: 0px;
+  font-size: 30px;
   width: 60px;
   height: 60px;
   border-radius: 5%;
@@ -27,10 +29,31 @@
   background: yellow;
 }
 .rowHighlight {
-  margin: 5px;
+  margin: 0px;
   width: 60px;
+  font-size: 30px;
   height: 60px;
   border-radius: 5%;
   border: 2px solid black;
   background: blue;
+}
+.clue {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 300px;
+  height: 80px;
+  font-size: 14px;
+  word-wrap: normal;
+  overflow: scroll;
+}
+.dark_space {
+  margin: 0px;
+  width: 60px;
+  height: 60px;
+  border-radius: 5%;
+  border: 2px solid black;
+  background: black;
+}
+input > .space {
+  font-size: 28px;
 }
