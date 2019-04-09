@@ -46,7 +46,11 @@ app.get('/user', async (req, res) => {
     const email = req.specialData;
     let user = await User.findByPk(email);
     console.log(user);
-    res.json(user.dataValues);
+    if (user !== null) {
+      res.json(user.dataValues);
+    } else {
+      res.json({msg: 'user not found'})
+    }
   } catch(e) {
     console.error(e);
     res.status(403);

@@ -16,5 +16,21 @@
   width: 60px;
   height: 60px;
   border-radius: 5%;
-  border: 2px solid black
+  border: 2px solid black;
+}
+.selected {
+  margin: 5px;
+  width: 60px;
+  height: 60px;
+  border-radius: 5%;
+  border: 2px solid black;
+  background: yellow;
+}
+.rowHighlight {
+  margin: 5px;
+  width: 60px;
+  height: 60px;
+  border-radius: 5%;
+  border: 2px solid black;
+  background: blue;
 }

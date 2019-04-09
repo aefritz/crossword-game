@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import {Route, Link, Redirect, withRouter} from 'react-router-dom';
-import getWordList from './services/oxfordApi';
+import {getWordList} from './services/oxfordApi';
 import {Facebook, FacebookApiException} from 'fb';
 import queryString from 'query-string';
 import './App.css';
 import LoginFlow from './components/LoginFlow';
 import Gameboard from './components/Gameboard';
 import {getUser, createUser} from './services';
+import dotenv from'dotenv'
+let config = dotenv.config();
 let appid = process.env.REACT_APP_APP_ID;
 let appsecret = process.env.REACT_APP_APP_SECRET;
 
@@ -93,7 +95,9 @@ class App extends Component {
       console.log(res);
     });
     let resp = await getUser(token);
-    console.log(resp.data);
+    if (resp.data.msg === 'user not found') {
+      resp = await createUser(token);
+    }
     this.setState({
       data: crossword_data,
       redirectURL: url,
@@ -121,8 +125,7 @@ class App extends Component {
         <Route path = "/play" render={(props)=>
         <Gameboard data={this.state.data}/>}/>
 
-        <Route path = "/play" render={(props)=>
-        null}/>
+
 
       </div>
     )
