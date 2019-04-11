@@ -480,6 +480,7 @@ class Gameboard extends Component {
           {
           (this.state.win && this.state.showMsg) && (<div className='winMessage' onClick={this.turnOffMsg}>
                 <h3 onClick={this.turnOffMsg}>Congratulations</h3>
+                <h3>You finished in {this.state.game_time} seconds</h3>
                 <FacebookShareButton children={<FacebookIcon/>} url="http://facebook.com" quote={`I finished a puzzle in ${this.state.game_time} seconds`}/>
               </div>)
             }

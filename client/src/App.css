@@ -93,6 +93,8 @@ input > .space {
   color: white;
   font-size: 42px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   z-index: 8;
 }
