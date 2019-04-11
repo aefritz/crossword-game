@@ -20,11 +20,21 @@ const SavedGame = sequelize.define('saved_games', {
   usersPositions: {type: Sequelize.TEXT, allowNull: false}
 });
 
+const Question = sequelize.define('questions', {
+  id: {type: Sequelize.INTEGER, primaryKey: true},
+  clue: {type: Sequelize.TEXT},
+  answer: {type: Sequelize.TEXT},
+  month: {type: Sequelize.STRING},
+  day: {type: Sequelize.STRING},
+  year: {type: Sequelize.STRING}
+})
+
 SavedGame.belongsTo(User);
 User.hasMany(SavedGame, {onDelete: 'cascade'});
 
 module.exports = {
   sequelize,
   User,
-  SavedGame
+  SavedGame,
+  Question
 };

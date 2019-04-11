@@ -56,3 +56,8 @@ export const getUserProPic = async (token) => {
   const resp = await api.get(`userspro`, {headers: {Authorization: `Bearer ${token}`}});
   return resp;
 }
+
+export const getCrosswordData = async (token) => {
+  const resp = await api.get(`crossworddata`, {headers: {Authorization: `Bearer ${token}`}});
+  return resp;
+}

@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Nanum+Pen+Script|Roboto+Slab');
+
+* {
+  font-family: 'Roboto Slab', serif;
+}
 .App {
   text-align: center;
   background: linear-gradient(to left, #EFF0D1, #CDD0B0);
@@ -19,6 +24,7 @@
   border-radius: 5%;
   border: 2px solid black;
   text-align: center;
+  font-family: 'Nanum Pen Script', cursive;
 }
 .selected {
   margin: 0px;
@@ -29,6 +35,7 @@
   border: 2px solid black;
   background: yellow;
   text-align: center;
+  font-family: 'Nanum Pen Script', cursive;
 }
 .rowHighlight {
   margin: 0px;
@@ -39,6 +46,7 @@
   border: 2px solid black;
   background: blue;
   text-align: center;
+  font-family: 'Nanum Pen Script', cursive;
 }
 .clue {
   margin-top: 0px;
@@ -67,11 +75,10 @@ input > .space {
   margin: 20px auto;
   display: flex;
   justify-content: center;
+  font-family: 'Nanum Pen Script', cursive;
 }
 .imageContainer {
   width: 50%;
-  background: orange;
-  height: 200px;
 }
 #timer {
   margin-top: 0px;
@@ -118,6 +125,7 @@ input > .space {
 }
 .userView1 {
   width: 40%;
+  height: auto;
   border: 1px solid black;
   display: flex;
   flex-direction: column;

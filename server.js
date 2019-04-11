@@ -5,7 +5,7 @@ const logger = require('morgan');
 const dotenv = require('dotenv').config();
 const {Facebook} = require('fb');
 
-const { User, SavedGame } = require('./models');
+const { User, SavedGame, Question } = require('./models');
 const PORT = process.env.PORT || 3001;
 const appId = process.env.REACT_APP_APP_ID;
 const appSecret = process.env.REACT_APP_APP_SECRET;
@@ -151,6 +151,18 @@ app.get('/userspro', async (req, res) => {
     res.status(403);
   }
 });
+
+app.get('/crossworddata', async (req, res) => {
+  try {
+    let questions = await Question.findAll({});
+    res.json(questions);
+  } catch(e) {
+    console.error(e);
+    res.status(403);
+  }
+})
+
+
 
 
 app.listen(PORT, () => {

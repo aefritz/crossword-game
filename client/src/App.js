@@ -81,8 +81,8 @@ class App extends Component {
 
 
   async componentDidMount (props) {
+    let token = '';
     let crossword_data = {};
-    let token = ''
     if (localStorage.getItem('crossword-app-data')) {
       crossword_data = JSON.parse(localStorage.getItem('crossword-app-data'));
     } else {

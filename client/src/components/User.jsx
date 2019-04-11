@@ -21,8 +21,8 @@ class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accessToken: '',
-      imageURL: '',
+      accessToken: props.accessToken,
+      imageURL: props.imageURL,
       currentUser: null,
       savedGames: []
     }
@@ -32,13 +32,32 @@ class User extends Component {
   async handleDelete(id) {
     let resp = await deleteGame(id, this.state.accessToken);
     console.log(resp);
+    this.setState(prevState => ({
+      ...prevState,
+      savedGames: prevState.savedGames.filter(game => game.id !== id)
+    }));
   }
 
   async componentDidMount() {
-
+    let token;
+    if (localStorage.getItem('crossword-app-token') || this.state.accessToken === '') {
+      token = JSON.parse(localStorage.getItem('crossword-app-token'));
+    }
+    console.log(token);
+    let propicURL = await getUserProPic(token);
+    console.log(propicURL)
+    let savedGames = await getSavedGames(token);
+    let user = await getUser(token);
+    console.log(savedGames);
+    this.setState({
+      accessToken: token,
+      propicURL: propicURL.data.url,
+      currentUser: user.data,
+      savedGames: savedGames.data
+    });
   }
 
-  async componentDidUpdate(prevProps, prevState) {
+  /*async componentDidUpdate(prevProps, prevState) {
     let accessToken = this.props.accessToken;
     let currentUser = this.props.currentUser;
     let profileURL = this.props.propicURL;
@@ -52,28 +71,28 @@ class User extends Component {
         savedGames: savedGames
       }));
     }
-  }
+  }*/
 
   render () {
-    console.log(this.props);
   return (
     <div className='userViewContainer'>
 
       <div className='userView1'>
       <h3>{(this.state.currentUser === null) ? null : this.state.currentUser.email}</h3>
         <div className='imageContainer'>
-          <img src={this.state.imageURL} className='profileImage'/>
+          <img src={this.state.propicURL} className='profileImage'/>
         </div>
         <div>
           <h4>Member Since: <span>{(this.state.currentUser === null) ? null : this.state.currentUser.createdAt}</span></h4>
           <h4>Games Played: <span>{(this.state.currentUser === null) ? null : this.state.currentUser.gamesPlayed}</span></h4>
+          <h4>Best Time: <span>{(this.state.currentUser === null) ? null : this.state.currentUser.bestTime}</span></h4>
         </div>
       </div>
 
       <div className='userView2'>
       <h3>Saved Games</h3>
         <div className='savedGamesList'>
-        {(this.state.savedGames === [] ) ? null : this.state.savedGames.map(game =>
+        {this.state.savedGames.map(game =>
             (<div className='savedGame'>
               <img src={Delete} className='deleteIcon' onClick={()=>this.handleDelete(game.id)}/>
               <Link to={`/play/${game.id}`}><img src={CrosswordIcon} className='crosswordIcon'/></Link>
@@ -81,6 +100,7 @@ class User extends Component {
                 <p>{game.createdAt}</p>
               </div>
             </div>))}
+        {(this.state.savedGames.length === 0) ? <h5><i>You have no saved games.</i></h5> : null}
           </div>
       </div>
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getWordDef} from '../services/oxfordApi';
-import {saveGame, reSaveGame} from '../services.js';
+import {saveGame, reSaveGame, getCrosswordData} from '../services.js';
 import {FacebookShareButton, FacebookIcon} from 'react-share';
 
 class Gameboard extends Component {
@@ -31,7 +31,7 @@ class Gameboard extends Component {
       selectedPosition: {x: null, y: null},
       toggleDirection: '',
       currentDefinition: '',
-      accessToken: '',
+      accessToken: props.accessToken,
       win: false,
       timer: null,
       showMsg: false,
@@ -55,9 +55,16 @@ class Gameboard extends Component {
     this.turnOffMsg = this.turnOffMsg.bind(this);
   }
 
+  async componentDidMount () {
+    console.log(this.state.accessToken);
+    let resp = await getCrosswordData(this.state.accessToken);
+    this.setState({
+      data: resp.data
+    })
+    this.startGame();
+  }
 
-
-  async componentWillReceiveProps(nextProps) {
+  /*async componentWillReceiveProps(nextProps) {
     console.log(this.props);
     console.log(nextProps);
     console.log('fired');
@@ -69,7 +76,7 @@ class Gameboard extends Component {
       }));
       this.startGame();
     }
-  }
+  }*/
 
   componentWillUnmount() {
         window.clearInterval(this.state.timer);
@@ -93,14 +100,14 @@ class Gameboard extends Component {
     while (finished === false) {
       let oneMatchForEach = false;
       while (oneMatchForEach === false) {
-        across1 = this.state.data[Math.floor(5000*Math.random())].word;
-        across3 = this.state.data[Math.floor(5000*Math.random())].word;
+        across1 = this.state.data[Math.floor(10000*Math.random())].answer;
+        across3 = this.state.data[Math.floor(10000*Math.random())].answer;
         let regExp1 = this.convertStrInfoToRegex(across1[0], across3[0]);
         let regExp2 = this.convertStrInfoToRegex(across1[2], across3[2]);
         let regExp3 = this.convertStrInfoToRegex(across1[4], across3[4]);
-        down1Array = this.state.data.filter(word => word.word.match(regExp1));
-        down2Array = this.state.data.filter(word => word.word.match(regExp2));
-        down3Array = this.state.data.filter(word => word.word.match(regExp3));
+        down1Array = this.state.data.filter(word => word.answer.match(regExp1));
+        down2Array = this.state.data.filter(word => word.answer.match(regExp2));
+        down3Array = this.state.data.filter(word => word.answer.match(regExp3));
         down1ArrayLength = down1Array.length;
         down2ArrayLength = down2Array.length;
         down3ArrayLength = down3Array.length;
@@ -114,16 +121,16 @@ class Gameboard extends Component {
         const indx1 = Math.floor(down1ArrayLength*Math.random());
         const indx2 = Math.floor(down2ArrayLength*Math.random());
         const indx3 = Math.floor(down3ArrayLength*Math.random());
-        down1 = down1Array[indx1].word;
-        down2 = down2Array[indx2].word;
-        down3 = down3Array[indx3].word;
+        down1 = down1Array[indx1].answer;
+        down2 = down2Array[indx2].answer;
+        down3 = down3Array[indx3].answer;
         let regExpAttemptStr = `${down1[2]}.${down2[2]}.${down3[2]}`
         let regExpAttempt = new RegExp(regExpAttemptStr, 'i');
-        let potentialMatches = this.state.data.filter(word => word.word.match(regExpAttempt));
+        let potentialMatches = this.state.data.filter(word => word.answer.match(regExpAttempt));
         if (potentialMatches.length > 0) {
           console.log(potentialMatches);
           const indx = Math.floor(potentialMatches.length*Math.random());
-          across2 = potentialMatches[indx].word;
+          across2 = potentialMatches[indx].answer;
           match_found = true;
           finished = true;
         }
@@ -135,10 +142,10 @@ class Gameboard extends Component {
     }
     let wordArray = [across1, across2, across3, down1, down2, down3];
     console.log(wordArray);
-    let definitionArray = await Promise.all(wordArray.map(async (word) => {
-      let resp = await getWordDef(word);
-      return resp;
-    }));
+    let definitionArray = wordArray.map((word) => {
+      let entry = this.state.data.filter(blah => blah.answer === word)[0];
+      return entry.clue;
+    });
     let timer = window.setInterval(()=>{
       console.log('bleep');
       document.querySelector('#timer').innerText = (parseInt(document.querySelector('#timer').innerText) + 1) + "s";
@@ -179,6 +186,7 @@ class Gameboard extends Component {
 
   handleChange(ev) {
     const {value} = ev.target;
+    console.log(value);
     let winStatus;
     const x = parseInt(ev.target.dataset.x);
     const y = parseInt(ev.target.dataset.y);
@@ -187,8 +195,24 @@ class Gameboard extends Component {
     positions[y][x].letter = value;
     this.setState(prevState => ({
       ...prevState,
-      positions: positions}))
-    if (this.state.positions.every(a => a.every(b => b.letter === b.answer))) {
+      positions: positions}));
+    if (value !== 0) {
+      if (this.state.toggleDirection === 'down') {
+        let nextPosition = (y + 1) % 5;
+        console.log(nextPosition);
+        let node = document.querySelectorAll(`input[data-x = '${x}'][data-y = '${nextPosition}']`);
+        console.log(node)
+        document.querySelector(`input[data-x = '${x}'][data-y = '${nextPosition}']`).focus();
+      }
+      if (this.state.toggleDirection === 'across') {
+        let nextPosition = (x + 1) % 5;
+        console.log(nextPosition);
+        let node = document.querySelectorAll(`input[data-x = '${x}'][data-y = '${nextPosition}']`);
+        console.log(node)
+        document.querySelector(`input[data-x = '${nextPosition}'][data-y = '${y}']`).focus();
+      }
+    }
+    if (this.state.positions.every(a => a.every(b => b.letter.toUpperCase() === b.answer))) {
       window.clearInterval(this.state.timer);
       console.log('winner');
       let game_time = parseInt(document.querySelector('#timer').innerText);
@@ -203,10 +227,6 @@ class Gameboard extends Component {
   }
 
   handleFocus(ev) {
-    if (document.querySelector('.selected')) {
-      document.querySelector('.selected').className='space';
-    }
-    ev.target.className = 'selected';
     let x = ev.target.dataset.x;
     let y = ev.target.dataset.y;
     this.setState(prevState => ({
