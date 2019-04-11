@@ -47,6 +47,11 @@ export const reSaveGame = async (id, data, token) => {
   return resp;
 }
 
+export const deleteGame = async (id, token) => {
+  const resp = await api.delete(`savedgames/${id}`, {headers: {Authorization: `Bearer ${token}`}});
+  return resp;
+}
+
 export const getUserProPic = async (token) => {
   const resp = await api.get(`userspro`, {headers: {Authorization: `Bearer ${token}`}});
   return resp;

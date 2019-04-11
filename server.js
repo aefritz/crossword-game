@@ -14,7 +14,7 @@ const fb = new Facebook();
 const options = fb.options({
   appId: appId,
   appSecret: appSecret,
-  redirectUri: 'http://localhost:3000/'
+  redirectUri: 'http://localhost:3000/login'
 });
 
 const app = express();
@@ -100,8 +100,7 @@ app.post('/savedgames', async (req, res) => {
 app.get('/savedgames', async (req, res) => {
   try {
     const email = req.specialData;
-    let user = await User.findByPk(email);
-    let games = await user.getSavedGames();
+    let games = await SavedGame.findAll({where:{userEmail: email}});
     res.json(games);
   } catch (e) {
     console.error(e);
@@ -115,7 +114,7 @@ app.delete('/savedgames/:id', async (req, res) => {
     let id = req.params.id;
     let savedgame = await SavedGame.findByPk(id);
     if (savedgame.userEmail === email) {
-      await SavedGame.delete({where: {id}});
+      await SavedGame.destroy({where: {id}});
       res.json({msg: 'game deleted'})
     }
   } catch(e) {

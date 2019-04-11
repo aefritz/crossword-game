@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import {Route, Link, Redirect, withRouter} from 'react-router-dom';
 import {getWordList} from './services/oxfordApi';
 import {Facebook, FacebookApiException} from 'fb';
+import CrosswordAnimation from './components/CrosswordAnimation.gif';
+import FacebookLogin from './components/FacebookLogin.png';
 import queryString from 'query-string';
 import './App.css';
 import LoginFlow from './components/LoginFlow';
 import User from './components/User';
 import Gameboard from './components/Gameboard';
-import {getUser, createUser, getUserProPic} from './services';
+import {getUser, createUser, getUserProPic, getSavedGames} from './services';
 import dotenv from'dotenv'
 let config = dotenv.config();
 let appid = process.env.REACT_APP_APP_ID;
@@ -18,7 +20,7 @@ const fb = new Facebook();
 const options = fb.options({
   appId: appid,
   appSecret: appsecret,
-  redirectUri: 'http://localhost:3000/'
+  redirectUri: 'http://localhost:3000/login'
 });
 
 class App extends Component {
@@ -36,16 +38,22 @@ class App extends Component {
       redirectURL: "",
       expires: "",
       propicURL: "",
-      currentUser: null
+      currentUser: null,
+      savedGames: null
     }
     this.exchangeCodeForToken = this.exchangeCodeForToken.bind(this);
     this.setToken = this.setToken.bind(this);
   }
 
-  setToken (token) {
+  async setToken (token) {
+    let resp = await getUser(token);
+    if (resp.data.msg === 'user not found') {
+      resp = await createUser(token);
+    }
     this.setState({
       accessToken: token,
-      token_set: true
+      token_set: true,
+      currentUser: resp.data,
     })
   }
 
@@ -54,7 +62,7 @@ class App extends Component {
     let token;
     let expires;
     await fb.api('oauth/access_token', {
-      redirect_uri: 'http://localhost:3000/',
+      redirect_uri: 'http://localhost:3000/login',
       client_id: appid,
       client_secret: appsecret,
       code: code
@@ -65,9 +73,6 @@ class App extends Component {
       }
       token = res.access_token;
       await fb.setAccessToken(token);
-      await fb.api('me', { fields: ['email'], access_token: token }, function (res) {
-        console.log(res);
-      });
       localStorage.setItem('crossword-app-token', JSON.stringify(token));
       passedFunction(token);
     });
@@ -92,22 +97,25 @@ class App extends Component {
     if (localStorage.getItem('crossword-app-token')) {
       token = JSON.parse(localStorage.getItem('crossword-app-token'));
       await fb.setAccessToken(token);
+      let resp = await getUser(token);
+      if (resp.data.msg === 'user not found') {
+        resp = await createUser(token);
+      }
+      let propicURL = await getUserProPic(token);
+      let savedGames = await getSavedGames(token);
+      this.setState({
+        data: crossword_data,
+        redirectURL: url,
+        accessToken: token,
+        currentUser: resp.data,
+        propicURL: propicURL.data.url,
+        savedGames: savedGames.data
+      });
+    } else {
+      this.setState({
+        redirectURL : url
+      });
     }
-    await fb.api('me', { fields: ['email'], access_token: token }, function (res) {
-      console.log(res);
-    });
-    let resp = await getUser(token);
-    if (resp.data.msg === 'user not found') {
-      resp = await createUser(token);
-    }
-    let propicURL = await getUserProPic(token);
-    this.setState({
-      data: crossword_data,
-      redirectURL: url,
-      accessToken: token,
-      currentUser: resp.data,
-      propicURL: propicURL.data.url
-    });
   }
 
   render() {
@@ -119,7 +127,14 @@ class App extends Component {
           <Link to='/play'>Play</Link>
         </nav>
 
-        <Route exact path = "/" render={(props)=>
+        <Route exact path = '/' render={(props) => (
+          <div className="landingPage">
+            <Link to='/login'><img src={FacebookLogin} className="facebookLogin"/></Link>
+            <img src={CrosswordAnimation} className="landingImage"/>
+          </div>
+        )}/>
+
+        <Route path = "/login" render={(props)=>
           <LoginFlow {...props}
           exchangeCodeForToken={this.exchangeCodeForToken}
           setToken={this.setToken}
@@ -130,7 +145,7 @@ class App extends Component {
           <Gameboard data={this.state.data} accessToken={this.state.accessToken}/>}/>
 
         <Route path = '/user' render={(props)=>
-          <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL}/>}/>
+          <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL} savedGames={this.state.savedGames}/>}/>
 
 
       </div>
