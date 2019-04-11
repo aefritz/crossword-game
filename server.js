@@ -59,10 +59,22 @@ app.get('/user', async (req, res) => {
 
 app.put('/user', async (req, res) => {
   try {
+    console.log("put route triggered");
     const email = req.specialData;
+    let time = parseInt(req.body.time);
     let user = await User.findByPk(email);
-    user.games_played = parseInt(user.games_played) + 1;
-    user.save();
+    let new_games_played = parseInt(user.dataValues.gamesPlayed) + 1;
+    let resp = await user.update({
+      email,
+      gamesPlayed: new_games_played,
+      bestTime: ((time < user.dataValues.bestTime) || (user.dataValues.bestTime === null)) ? time : user.dataValues.bestTime
+    })
+    const new_time = parseInt(req.body.time);
+    //user.gamesPlayed = parseInt(user.gamesPlayed) + 1;
+    //if ((user.bestTime === null) || (user.best_time > new_time)) {
+      //user.bestTime = new_time;
+    //}
+    //user.save();
     res.json(user);
   } catch (e) {
     console.error(e);
@@ -162,8 +174,16 @@ app.get('/crossworddata', async (req, res) => {
   }
 })
 
-
-
+app.get('/savedgames/:id', async (req, res) => {
+  try {
+    let {id} = req.params;
+    let savedgame = await SavedGame.findByPk(id);
+    res.json(savedgame);
+  } catch(e) {
+    console.error(e);
+    res.status(403);
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

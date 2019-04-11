@@ -117,13 +117,14 @@ input > .space {
   margin: 30px auto;
   width: 75%;
   border: 1px solid black;
-  height: 60vh;
+  height: auto;
   display: flex;
   justify-content: space-around;
   text-align: left;
   padding: 20px;
 }
 .userView1 {
+  padding: 15px;
   width: 40%;
   height: auto;
   border: 1px solid black;
@@ -132,6 +133,7 @@ input > .space {
   align-items: center;
 }
 .userView2 {
+  padding: 15px;
   width: 40%;
   border: 1px solid black;
   overflow: scroll;

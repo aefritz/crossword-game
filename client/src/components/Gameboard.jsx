@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getWordDef} from '../services/oxfordApi';
-import {saveGame, reSaveGame, getCrosswordData} from '../services.js';
+import {saveGame, reSaveGame, getCrosswordData, deleteGame, updateUser, getSavedGame} from '../services.js';
 import {FacebookShareButton, FacebookIcon} from 'react-share';
 
 class Gameboard extends Component {
@@ -36,7 +36,7 @@ class Gameboard extends Component {
       timer: null,
       showMsg: false,
       game_time: 0,
-      saved_game_id: null,
+      saved_game_id: (props.id !== undefined) ? props.id : null,
       positions: [
         [{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''}],
         [{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''}],
@@ -56,13 +56,30 @@ class Gameboard extends Component {
   }
 
   async componentDidMount () {
-    console.log(this.state.accessToken);
     let resp = await getCrosswordData(this.state.accessToken);
     this.setState({
-      data: resp.data
+      data: resp.data,
     })
-    this.startGame();
+    if (this.state.saved_game_id === null) {
+      this.startGame();
+    } else {
+      let resp = await getSavedGame(this.state.saved_game_id, this.state.accessToken);
+      this.startSavedGame(resp.data);
+    }
   }
+
+  startSavedGame(data) {
+    let timer = window.setInterval(()=>{
+      console.log('bleep');
+      document.querySelector('#timer').innerText = (parseInt(document.querySelector('#timer').innerText) + 1) + "s";
+    },1000);
+    this.setState({
+      timer: timer,
+      words: JSON.parse(data.puzzle),
+      positions: JSON.parse(data.usersPositions)
+    })
+  }
+
 
   /*async componentWillReceiveProps(nextProps) {
     console.log(this.props);
@@ -184,7 +201,7 @@ class Gameboard extends Component {
   }
 
 
-  handleChange(ev) {
+  async handleChange(ev) {
     const {value} = ev.target;
     console.log(value);
     let winStatus;
@@ -196,7 +213,7 @@ class Gameboard extends Component {
     this.setState(prevState => ({
       ...prevState,
       positions: positions}));
-    if (value !== 0) {
+    if (value.length !== 0) {
       if (this.state.toggleDirection === 'down') {
         let nextPosition = (y + 1) % 5;
         console.log(nextPosition);
@@ -222,7 +239,12 @@ class Gameboard extends Component {
         win: true,
         showMsg: true,
         timer: null
-      }))
+      }));
+      if (this.state.saved_game_id !== null) {
+        await deleteGame(this.state.saved_game_id, this.state.accessToken);
+      }
+      console.log(this.state.accessToken);
+      await updateUser({time: game_time}, this.state.accessToken);
     }
   }
 

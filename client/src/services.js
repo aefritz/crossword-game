@@ -27,8 +27,8 @@ export const getUser = async (token) => {
    return resp;
 }
 
-export const updateUser =  async (token) => {
-   const resp = await api.put('user', {headers: {Authorization: `Bearer ${token}`}});
+export const updateUser =  async (data, token) => {
+   const resp = await api.put('user', data, {headers: {Authorization: `Bearer ${token}`}});
    return resp;
 }
 
@@ -59,5 +59,10 @@ export const getUserProPic = async (token) => {
 
 export const getCrosswordData = async (token) => {
   const resp = await api.get(`crossworddata`, {headers: {Authorization: `Bearer ${token}`}});
+  return resp;
+}
+
+export const getSavedGame = async (id, token) => {
+  const resp = await api.get(`savedgames/${id}`, {headers: {Authorization: `Bearer ${token}`}});
   return resp;
 }

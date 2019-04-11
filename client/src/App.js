@@ -145,7 +145,7 @@ class App extends Component {
           <Gameboard data={this.state.data} accessToken={this.state.accessToken}/>}/>
 
         <Route exact path = "/play/:id" render={(props)=>
-          <Gameboard data={this.state.data} accessToken={this.state.accessToken} id={props.match.params.id} savedGame={(this.state.savedGames === null) ? [] : this.state.savedGames.filter(game => game.id === parseInt(props.match.params.id))}/>}/>
+          <Gameboard data={this.state.data} accessToken={this.state.accessToken} id={props.match.params.id}/>}/>
 
         <Route path = '/user' render={(props)=>
           <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL} savedGames={this.state.savedGames}/>}/>
