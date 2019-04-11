@@ -60,6 +60,7 @@ class Gameboard extends Component {
   async componentWillReceiveProps(nextProps) {
     console.log(this.props);
     console.log(nextProps);
+    console.log('fired');
     if (this.props.data !== nextProps.data) {
       await this.setState(prevState => ({
         ...prevState,
