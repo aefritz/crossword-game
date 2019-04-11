@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {getWordDef} from '../services/oxfordApi';
+import {saveGame, reSaveGame} from '../services.js';
+import {FacebookShareButton, FacebookIcon} from 'react-share';
 
 class Gameboard extends Component {
   constructor(props) {
@@ -29,9 +31,12 @@ class Gameboard extends Component {
       selectedPosition: {x: null, y: null},
       toggleDirection: '',
       currentDefinition: '',
+      accessToken: '',
       win: false,
       timer: null,
+      showMsg: false,
       game_time: 0,
+      saved_game_id: null,
       positions: [
         [{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''}],
         [{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''},{letter:'', answer:''}],
@@ -46,20 +51,28 @@ class Gameboard extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleSave = this.handleSave.bind(this);
+    this.turnOffMsg = this.turnOffMsg.bind(this);
   }
 
-  componentDidMount() {
-  }
+
 
   async componentWillReceiveProps(nextProps) {
+    console.log(this.props);
+    console.log(nextProps);
     if (this.props.data !== nextProps.data) {
       await this.setState(prevState => ({
         ...prevState,
-        data: nextProps.data
+        data: nextProps.data,
+        accessToken: nextProps.accessToken
       }));
       this.startGame();
     }
   }
+
+  componentWillUnmount() {
+        window.clearInterval(this.state.timer);
+    }
 
 
   async startGame() {
@@ -182,6 +195,7 @@ class Gameboard extends Component {
         ...prevState,
         game_time: game_time,
         win: true,
+        showMsg: true,
         timer: null
       }))
     }
@@ -261,6 +275,30 @@ class Gameboard extends Component {
     }
   }
 
+  async handleSave() {
+    let words = JSON.stringify(this.state.words);
+    let positions = JSON.stringify(this.state.positions);
+    let resp;
+    if (this.state.saved_game_id === null) {
+      resp = await saveGame({
+        puzzle: words,
+        usersPositions: positions
+      }, this.state.accessToken);
+      console.log(resp);
+    } else if (this.state.saved_game_id !== null) {
+      console.log(this.state.saved_game_id);
+      resp = await reSaveGame(this.state.saved_game_id, {
+        puzzle: words,
+        usersPositions: positions
+      }, this.state.accessToken);
+      console.log(resp);
+    }
+    this.setState(prevState => ({
+      ...prevState,
+      saved_game_id: resp.data.id
+    }));
+  }
+
   convertStrInfoToRegex(char1, char2) {
     let newRegExpString = "";
     for (let i=0; i<5; i++) {
@@ -276,116 +314,134 @@ class Gameboard extends Component {
     return newRegEx;
   }
 
+  turnOffMsg() {
+    this.setState(prevState => ({
+      ...prevState,
+      showMsg: false
+    }))
+  }
+
   render() {
     return (
-      <div>
-      <form>
-        <textarea value={this.state.currentDefinition} className='clue'></textarea>
-        <p id='timer'>0</p>
-        <div className="container" onClick={this.handleClick} onChange={this.handleChange}>
+      <div className='gameContainer'>
 
-          <div className="space" data-x="0" data-y="0" >
-            <input className="space" type='text'  data-x="0" data-y="0"  value={this.state.positions[0][0].letter} onFocus={this.handleFocus}></input>
-          </div>
+      <div className='mainBoard'>
+        <form>
 
-          <div className="space" data-x="1" data-y="0" >
-            <input className="space" type='text'  data-x="1" data-y="0"  value={this.state.positions[0][1].letter} onFocus={this.handleFocus}></input>
-          </div>
+          <div className="container" onClick={this.handleClick} onChange={this.handleChange}>
 
-          <div className="space" data-x="2" data-y="0" >
-            <input className="space" type='text'  data-x="2" data-y="0"  value={this.state.positions[0][2].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="0" data-y="0" >
+              <input className="space" type='text'  data-x="0" data-y="0"  value={this.state.positions[0][0].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="3" data-y="0">
-            <input className="space" type='text' data-x="3" data-y="0" value={this.state.positions[0][3].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="1" data-y="0" >
+              <input className="space" type='text'  data-x="1" data-y="0"  value={this.state.positions[0][1].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="4" data-y="0">
-            <input className="space" type='text'  data-x="4" data-y="0" value={this.state.positions[0][4].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="2" data-y="0" >
+              <input className="space" type='text'  data-x="2" data-y="0"  value={this.state.positions[0][2].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="0" data-y="1">
-            <input className="space" type='text' data-x="0" data-y="1" value={this.state.positions[1][0].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="3" data-y="0">
+              <input className="space" type='text' data-x="3" data-y="0" value={this.state.positions[0][3].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="dark_space" data-x="1" data-y="1">
+            <div className="space" data-x="4" data-y="0">
+              <input className="space" type='text'  data-x="4" data-y="0" value={this.state.positions[0][4].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          </div>
+            <div className="space" data-x="0" data-y="1">
+              <input className="space" type='text' data-x="0" data-y="1" value={this.state.positions[1][0].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="2" data-y="1">
-            <input className="space" type='text' data-x="2" data-y="1" value={this.state.positions[1][2].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="dark_space" data-x="1" data-y="1">
+            </div>
 
-          <div className="dark_space" data-x="3" data-y="1">
+            <div className="space" data-x="2" data-y="1">
+              <input className="space" type='text' data-x="2" data-y="1" value={this.state.positions[1][2].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          </div>
+            <div className="dark_space" data-x="3" data-y="1">
+            </div>
 
-          <div className="space" data-x="4" data-y="1">
-            <input className="space" type='text' data-x="4" data-y="1" value={this.state.positions[1][4].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="4" data-y="1">
+              <input className="space" type='text' data-x="4" data-y="1" value={this.state.positions[1][4].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="0" data-y="2">
-            <input className="space" type='text' data-x="0" data-y="2" value={this.state.positions[2][0].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="0" data-y="2">
+              <input className="space" type='text' data-x="0" data-y="2" value={this.state.positions[2][0].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="1" data-y="2">
-            <input className="space" type='text' data-x="1" data-y="2" value={this.state.positions[2][1].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="1" data-y="2">
+              <input className="space" type='text' data-x="1" data-y="2" value={this.state.positions[2][1].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="2" data-y="2">
-            <input className="space" type='text' data-x="2" data-y="2" value={this.state.positions[2][2].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="2" data-y="2">
+              <input className="space" type='text' data-x="2" data-y="2" value={this.state.positions[2][2].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="3" data-y="2">
-            <input className="space" type='text' data-x="3" data-y="2" value={this.state.positions[2][3].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="3" data-y="2">
+              <input className="space" type='text' data-x="3" data-y="2" value={this.state.positions[2][3].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="4" data-y="2">
-            <input className="space" type='text' data-x="4" data-y="2" value={this.state.positions[2][4].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="4" data-y="2">
+              <input className="space" type='text' data-x="4" data-y="2" value={this.state.positions[2][4].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="0" data-y="3">
-            <input className="space" type='text' data-x="0" data-y="3" value={this.state.positions[3][0].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="0" data-y="3">
+              <input className="space" type='text' data-x="0" data-y="3" value={this.state.positions[3][0].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="dark_space" data-x="1" data-y="3">
+            <div className="dark_space" data-x="1" data-y="3">
+            </div>
 
-          </div>
+            <div className="space" data-x="2" data-y="3">
+              <input className="space" type='text' data-x="2" data-y="3" value={this.state.positions[3][2].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="2" data-y="3">
-            <input className="space" type='text' data-x="2" data-y="3" value={this.state.positions[3][2].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="dark_space" data-x="3" data-y="3">
+            </div>
 
-          <div className="dark_space" data-x="3" data-y="3">
+            <div className="space" data-x="4" data-y="3">
+              <input className="space" type='text' data-x="4" data-y="3" value={this.state.positions[3][4].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          </div>
+            <div className="space" data-x="0" data-y="4">
+              <input className="space" type='text' data-x="0" data-y="4" value={this.state.positions[4][0].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="4" data-y="3">
-            <input className="space" type='text' data-x="4" data-y="3" value={this.state.positions[3][4].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="1" data-y="4">
+              <input className="space" type='text' data-x="1" data-y="4" value={this.state.positions[4][1].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="0" data-y="4">
-            <input className="space" type='text' data-x="0" data-y="4" value={this.state.positions[4][0].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="2" data-y="4">
+              <input className="space" type='text' data-x="2" data-y="4" value={this.state.positions[4][2].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="1" data-y="4">
-            <input className="space" type='text' data-x="1" data-y="4" value={this.state.positions[4][1].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="3" data-y="4">
+              <input className="space" type='text' data-x="3" data-y="4" value={this.state.positions[4][3].letter} onFocus={this.handleFocus}></input>
+            </div>
 
-          <div className="space" data-x="2" data-y="4">
-            <input className="space" type='text' data-x="2" data-y="4" value={this.state.positions[4][2].letter} onFocus={this.handleFocus}></input>
-          </div>
-
-          <div className="space" data-x="3" data-y="4">
-            <input className="space" type='text' data-x="3" data-y="4" value={this.state.positions[4][3].letter} onFocus={this.handleFocus}></input>
-          </div>
-
-          <div className="space" data-x="4" data-y="4">
-            <input className="space" type='text' data-x="4" data-y="4" value={this.state.positions[4][4].letter} onFocus={this.handleFocus}></input>
-          </div>
+            <div className="space" data-x="4" data-y="4">
+              <input className="space" type='text' data-x="4" data-y="4" value={this.state.positions[4][4].letter} onFocus={this.handleFocus}></input>
+            </div>
 
           </div>
         </form>
+      </div>
+
+        <div className='gameInfo'>
+          <button onClick={this.handleSave}>Save Game</button>
+          <p id='timer'>0</p>
+          <textarea value={this.state.currentDefinition} className='clue'></textarea>
+          {
+          (this.state.win && this.state.showMsg) && (<div className='winMessage' onClick={this.turnOffMsg}>
+                <h3 onClick={this.turnOffMsg}>Congratulations</h3>
+                <FacebookShareButton children={<FacebookIcon/>} url="http://facebook.com" quote={`I finished a puzzle in ${this.state.game_time} seconds`}/>
+              </div>)
+            }
+        </div>
+
       </div>
       )
     }

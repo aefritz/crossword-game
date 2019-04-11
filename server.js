@@ -57,12 +57,96 @@ app.get('/user', async (req, res) => {
   }
 });
 
+app.put('/user', async (req, res) => {
+  try {
+    const email = req.specialData;
+    let user = await User.findByPk(email);
+    user.games_played = parseInt(user.games_played) + 1;
+    user.save();
+    res.json(user);
+  } catch (e) {
+    console.error(e);
+    res.status(403);
+  }
+})
+
 app.post('/user', async (req, res) => {
   try {
     const email = req.specialData;
     let user = await User.create({email});
     console.log(user);
     res.json(user.dataValues);
+  } catch(e) {
+    console.error(e);
+    res.status(403);
+  }
+});
+
+app.post('/savedgames', async (req, res) => {
+  try {
+    const email = req.specialData;
+    let data = req.body;
+    console.log(req.body);
+    let user = await User.findByPk(email);
+    let newgame = await SavedGame.create(data);
+    await newgame.setUser(user);
+    res.json(newgame.dataValues);
+  } catch(e) {
+    console.error(e);
+    res.status(403);
+  }
+})
+
+app.get('/savedgames', async (req, res) => {
+  try {
+    const email = req.specialData;
+    let user = await User.findByPk(email);
+    let games = await user.getSavedGames();
+    res.json(games);
+  } catch (e) {
+    console.error(e);
+    res.status(403);
+  }
+});
+
+app.delete('/savedgames/:id', async (req, res) => {
+  try {
+    const email = req.specialData;
+    let id = req.params.id;
+    let savedgame = await SavedGame.findByPk(id);
+    if (savedgame.userEmail === email) {
+      await SavedGame.delete({where: {id}});
+      res.json({msg: 'game deleted'})
+    }
+  } catch(e) {
+    console.error(e);
+    res.status(403);
+  }
+})
+
+app.put('/savedgames/:id', async (req, res) => {
+  try {
+    const email = req.specialData;
+    let {id} = req.params;
+    let data = req.body;
+    let user = await User.findByPk(email);
+    let savedgame = await SavedGame.findByPk(id);
+    if (savedgame.userEmail === email) {
+      savedgame.update(data);
+    }
+    res.json(savedgame);
+  } catch(e) {
+    console.error(e);
+    res.status(403);
+  }
+});
+
+app.get('/userspro', async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    await fb.api('/me/picture','GET',{redirect: false, access_token: token, height: 200, width: 200}, function (response) {
+      res.json({url: response.data.url});
+    });
   } catch(e) {
     console.error(e);
     res.status(403);

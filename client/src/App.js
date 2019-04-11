@@ -5,8 +5,9 @@ import {Facebook, FacebookApiException} from 'fb';
 import queryString from 'query-string';
 import './App.css';
 import LoginFlow from './components/LoginFlow';
+import User from './components/User';
 import Gameboard from './components/Gameboard';
-import {getUser, createUser} from './services';
+import {getUser, createUser, getUserProPic} from './services';
 import dotenv from'dotenv'
 let config = dotenv.config();
 let appid = process.env.REACT_APP_APP_ID;
@@ -34,6 +35,7 @@ class App extends Component {
       accessToken: "",
       redirectURL: "",
       expires: "",
+      propicURL: "",
       currentUser: null
     }
     this.exchangeCodeForToken = this.exchangeCodeForToken.bind(this);
@@ -98,11 +100,13 @@ class App extends Component {
     if (resp.data.msg === 'user not found') {
       resp = await createUser(token);
     }
+    let propicURL = await getUserProPic(token);
     this.setState({
       data: crossword_data,
       redirectURL: url,
       accessToken: token,
-      currentUser: resp.data
+      currentUser: resp.data,
+      propicURL: propicURL.data.url
     });
   }
 
@@ -123,8 +127,10 @@ class App extends Component {
           url={this.state.redirectURL}/>}/>
 
         <Route path = "/play" render={(props)=>
-        <Gameboard data={this.state.data}/>}/>
+          <Gameboard data={this.state.data} accessToken={this.state.accessToken}/>}/>
 
+        <Route path = '/user' render={(props)=>
+          <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL}/>}/>
 
 
       </div>
