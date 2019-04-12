@@ -121,49 +121,68 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <nav>
-          <h2>Times-xWord-Throwback</h2>
-        </nav>
-        <nav>
-          <Link to='/user'>User</Link>
-          <Link to='/play'>Play</Link>
-          {this.state.accessToken && <Link to='/logout'>Logout</Link>}
-        </nav>
+        <main>
 
-        <Route exact path = '/' render={(props) => (
-          <div className="landingPage">
-            <Link to='/login'><img src={FacebookLogin} className="facebookLogin"/></Link>
-            <img src={CrosswordAnimation} className="landingImage"/>
-          </div>
-        )}/>
+            <nav>
+              <h2>Times-xWord-Throwback</h2>
+            </nav>
 
-        <Route path = "/login" render={(props)=>
-          <LoginFlow {...props}
-          exchangeCodeForToken={this.exchangeCodeForToken}
-          setToken={this.setToken}
-          accessToken={this.state.accessToken}
-          url={this.state.redirectURL}/>}/>
+            <nav>
+              <Link to='/user'>User</Link>
+              <Link to='/play'>Play</Link>
+              <Link to='/thanks'>Acknowledgements</Link>
+              {this.state.accessToken && <Link to='/logout'>Logout</Link>}
+            </nav>
 
-        <Route exact path = "/play/" render={(props)=>
-          <Gameboard data={this.state.data} accessToken={this.state.accessToken}/>}/>
+            <Route exact path = '/' render={(props) => (
+              <div className="landingPage">
+                <Link to='/login'><img src={FacebookLogin} className="facebookLogin"/></Link>
+                <img src={CrosswordAnimation} className="landingImage"/>
+                </div>
+            )}/>
 
-        <Route exact path = "/play/:id" render={(props)=>
-          <Gameboard data={this.state.data} accessToken={this.state.accessToken} id={props.match.params.id}/>}/>
+            <Route path = "/login" render={(props)=>
+              <LoginFlow {...props}
+                exchangeCodeForToken={this.exchangeCodeForToken}
+                setToken={this.setToken}
+                accessToken={this.state.accessToken}
+                url={this.state.redirectURL}/>}/>
 
-        <Route path = '/user' render={(props)=>
-          <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL} savedGames={this.state.savedGames}/>}/>
+            <Route exact path = "/play/" render={(props)=>
+              <Gameboard data={this.state.data} accessToken={this.state.accessToken}/>}/>
 
-        <Route path = '/logout' render={(props)=>{
-          console.log('clicked');
-          localStorage.removeItem('crossword-app-token');
-          this.setState({
-            accessToken: ''
-          });
-          return (
-            <Redirect to='/'/>
-          )
-        }}/>
+            <Route exact path = "/play/:id" render={(props)=>
+              <Gameboard data={this.state.data} accessToken={this.state.accessToken} id={props.match.params.id}/>}/>
 
+            <Route path = '/user' render={(props)=>
+              <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL} savedGames={this.state.savedGames}/>}/>
+
+            <Route path = '/logout' render={(props)=>{
+              console.log('clicked');
+              localStorage.removeItem('crossword-app-token');
+              this.setState({
+                accessToken: ''
+              });
+              return (
+                <Redirect to='/'/>
+              )
+            }}/>
+
+            <Route path = '/thanks' render={(props)=>(
+              <div className='thanks'>
+                Special thanks to:
+                <ul>
+                  <li>The Noun Project for icons. Detailed credits on the way</li>
+                  <li><a href='https://github.com/doshea/nyt_crosswords' id='github-link'>Doshea @ Github</a> for the JSON archive of past NY Times Crossword puzzles and answers</li>
+                </ul>
+              </div>
+            )}/>
+
+            <footer>
+              Designed by Austin Fritz in 2019.
+            </footer>
+
+          </main>
 
       </div>
     )

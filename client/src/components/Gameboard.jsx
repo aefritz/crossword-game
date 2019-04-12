@@ -477,6 +477,7 @@ class Gameboard extends Component {
           <button onClick={this.handleSave}>Save Game</button>
           <p id='timer'>0</p>
           <div className='clueContainer'>
+            <p className='clueHeader'>Clue:</p>
             <p className='clue'>{this.state.currentDefinition} </p>
           </div>
           {
