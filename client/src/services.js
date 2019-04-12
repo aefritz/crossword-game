@@ -14,7 +14,7 @@ const options = fb.options({
 
 
 const api = axios.create({
-  baseURL: 'https://timesxwordthrowback.herokuapp.com'
+  baseURL: 'https://timesxwordthrowback.herokuapp.com/'
 });
 
 export const createUser = async (token) => {
