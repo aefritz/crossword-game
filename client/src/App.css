@@ -8,6 +8,11 @@
   background: linear-gradient(to left, #EFF0D1, #CDD0B0);
   height: 100vh;
 }
+.clueContainer {
+  border-radius: 10px;
+  border: 1px solid black;
+  margin-top: 10px;
+}
 .container {
   margin: 0 auto;
   width: 335px;
@@ -15,6 +20,9 @@
   display: flex;
   flex-wrap: wrap;
   padding: 0px;
+}
+#timer {
+  margin: 10px 0;
 }
 .space {
   margin: 0px;
@@ -167,7 +175,7 @@ nav {
 }
 a {
   text-decoration: none;
-  margin: 5px;
+  margin: 25px;
   font-size: 20px;
   color: #EFF0D1;
 }

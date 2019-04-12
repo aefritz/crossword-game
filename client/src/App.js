@@ -20,7 +20,7 @@ const fb = new Facebook();
 const options = fb.options({
   appId: appid,
   appSecret: appsecret,
-  redirectUri: 'https://localhost:3000/login'
+  redirectUri: 'http://localhost:3000/login'
 });
 
 class App extends Component {
@@ -121,10 +121,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-
+        <nav>
+          <h2>Times-xWord-Throwback</h2>
+        </nav>
         <nav>
           <Link to='/user'>User</Link>
           <Link to='/play'>Play</Link>
+          {this.state.accessToken && <Link to='/logout'>Logout</Link>}
         </nav>
 
         <Route exact path = '/' render={(props) => (
@@ -149,6 +152,17 @@ class App extends Component {
 
         <Route path = '/user' render={(props)=>
           <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL} savedGames={this.state.savedGames}/>}/>
+
+        <Route path = '/logout' render={(props)=>{
+          console.log('clicked');
+          localStorage.removeItem('crossword-app-token');
+          this.setState({
+            accessToken: ''
+          });
+          return (
+            <Redirect to='/'/>
+          )
+        }}/>
 
 
       </div>

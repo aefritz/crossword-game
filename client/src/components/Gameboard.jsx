@@ -476,11 +476,14 @@ class Gameboard extends Component {
         <div className='gameInfo'>
           <button onClick={this.handleSave}>Save Game</button>
           <p id='timer'>0</p>
-          <textarea value={this.state.currentDefinition} className='clue'></textarea>
+          <div className='clueContainer'>
+            <p className='clue'>{this.state.currentDefinition} </p>
+          </div>
           {
           (this.state.win && this.state.showMsg) && (<div className='winMessage' onClick={this.turnOffMsg}>
                 <h3 onClick={this.turnOffMsg}>Congratulations</h3>
                 <h3>You finished in {this.state.game_time} seconds</h3>
+                <h6>Share on Facebook</h6>
                 <FacebookShareButton children={<FacebookIcon/>} url="http://facebook.com" quote={`I finished a puzzle in ${this.state.game_time} seconds`}/>
               </div>)
             }
