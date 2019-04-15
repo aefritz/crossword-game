@@ -9,12 +9,12 @@ const fb = new Facebook();
 const options = fb.options({
   appId: appid,
   appSecret: appsecret,
-  redirectUri: 'https://timesxwordthrowback.surge.sh/login'
+  redirectUri: 'http://localhost:3000/login'
 });
 
 
 const api = axios.create({
-  baseURL: 'https://timesxwordthrowback.herokuapp.com/'
+  baseURL: 'http://localhost:3001/'
 });
 
 export const createUser = async (token) => {

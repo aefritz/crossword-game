@@ -20,7 +20,7 @@ const fb = new Facebook();
 const options = fb.options({
   appId: appid,
   appSecret: appsecret,
-  redirectUri: 'https://timesxwordthrowback.surge.sh/login'
+  redirectUri: 'http://localhost:3000/login'
 });
 
 class App extends Component {

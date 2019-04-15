@@ -14,7 +14,7 @@ const fb = new Facebook();
 const options = fb.options({
   appId: appId,
   appSecret: appSecret,
-  redirectUri: 'https://timesxwordthrowback.surge.sh/login'
+  redirectUri: 'http://localhost:3000/login'
 });
 
 const app = express();
