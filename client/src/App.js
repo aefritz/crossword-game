@@ -62,7 +62,7 @@ class App extends Component {
     let token;
     let expires;
     await fb.api('oauth/access_token', {
-      redirect_uri: 'http://localhost:3000/login',
+      redirect_uri: 'https://timesxwordthrowback.surge.sh/login',
       client_id: appid,
       client_secret: appsecret,
       code: code
@@ -127,12 +127,12 @@ class App extends Component {
               <h2>Times-xWord-Throwback</h2>
             </nav>
 
-            <nav>
+          {this.state.accessToken && <nav>
               <Link to='/user'>User</Link>
               <Link to='/play'>Play</Link>
               <Link to='/thanks'>Acknowledgements</Link>
               {this.state.accessToken && <Link to='/logout'>Logout</Link>}
-            </nav>
+            </nav>}
 
             <Route exact path = '/' render={(props) => (
               <div className="landingPage">

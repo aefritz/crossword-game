@@ -60,6 +60,9 @@ main {
   height: auto;
   background: linear-gradient(to left, #EFF0D1, #CDD0B0);
 }
+h3 {
+  text-align: center;
+}
 .clue {
   margin-top: 0px;
   width: 90px;
@@ -91,6 +94,7 @@ input > .space {
 }
 .imageContainer {
   width: 50%;
+  margin: 0 auto;
 }
 #timer {
   margin-top: 0px;
@@ -197,6 +201,9 @@ a:visited {
   text-decoration: none
 }
 footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   background: black;
   text-align: center;
   font-size: 10px;
@@ -214,4 +221,20 @@ ul {
 }
 #github-link {
   color: black;
+}
+@media screen and (max-width: 643px) {
+  .userViewContainer{
+    flex-flow: column;
+  }
+  .userView1 {
+    width: 90%;
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+  h3 {
+    text-align: center;
+  }
+  .userView2 {
+    width: 90%;
+  }
 }

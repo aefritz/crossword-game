@@ -57,21 +57,6 @@ class User extends Component {
     });
   }
 
-  /*async componentDidUpdate(prevProps, prevState) {
-    let accessToken = this.props.accessToken;
-    let currentUser = this.props.currentUser;
-    let profileURL = this.props.propicURL;
-    let savedGames = this.props.savedGames;
-    if ((prevProps.accessToken !== accessToken) || (prevProps.currentUser !== currentUser)) {
-      this.setState(prevState => ({
-        ...prevState,
-        accessToken: accessToken,
-        imageURL: profileURL,
-        currentUser: currentUser,
-        savedGames: savedGames
-      }));
-    }
-  }*/
 
   render () {
   return (

@@ -485,7 +485,7 @@ class Gameboard extends Component {
                 <h3 onClick={this.turnOffMsg}>Congratulations</h3>
                 <h3>You finished in {this.state.game_time} seconds</h3>
                 <h6>Share on Facebook</h6>
-                <FacebookShareButton children={<FacebookIcon/>} url="http://facebook.com" quote={`I finished a puzzle in ${this.state.game_time} seconds`}/>
+                <FacebookShareButton children={<FacebookIcon/>} url="https://timesxwordthrowback.surge.sh" quote={`I finished a puzzle in ${this.state.game_time} seconds`}/>
               </div>)
             }
         </div>
