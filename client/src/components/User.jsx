@@ -68,7 +68,7 @@ class User extends Component {
           <img src={this.state.propicURL} className='profileImage'/>
         </div>
         <div>
-          <h4>Member Since: <span>{(this.state.currentUser === null) ? null : this.state.currentUser.createdAt}</span></h4>
+          <h4>Member Since: <span>{(this.state.currentUser === null) ? null : this.state.currentUser.createdAt.slice(0,10)}</span></h4>
           <h4>Games Played: <span>{(this.state.currentUser === null) ? null : this.state.currentUser.gamesPlayed}</span></h4>
           <h4>Best Time: <span>{(this.state.currentUser === null) ? null : this.state.currentUser.bestTime}</span></h4>
         </div>
@@ -82,7 +82,7 @@ class User extends Component {
               <img src={Delete} className='deleteIcon' onClick={()=>this.handleDelete(game.id)}/>
               <Link to={`/play/${game.id}`}><img src={CrosswordIcon} className='crosswordIcon'/></Link>
               <div>
-                <p>{game.createdAt}</p>
+                <p>{game.createdAt.slice(0,10)}</p>
               </div>
             </div>))}
         {(this.state.savedGames.length === 0) ? <h5><i>You have no saved games.</i></h5> : null}

@@ -58,7 +58,6 @@ class App extends Component {
   }
 
   async exchangeCodeForToken(code, passedFunction) {
-    console.log(code);
     let token;
     let expires;
     await fb.api('oauth/access_token', {
@@ -88,7 +87,6 @@ class App extends Component {
     } else {
       const resp = await getWordList();
       crossword_data = resp.data.results;
-      console.log(crossword_data)
       localStorage.setItem('crossword-app-data', JSON.stringify(crossword_data));
     }
     let url = await fb.getLoginUrl({
@@ -158,7 +156,6 @@ class App extends Component {
               <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL} savedGames={this.state.savedGames}/>}/>
 
             <Route path = '/logout' render={(props)=>{
-              console.log('clicked');
               localStorage.removeItem('crossword-app-token');
               this.setState({
                 accessToken: ''
@@ -173,7 +170,7 @@ class App extends Component {
                 Special thanks to:
                 <ul>
                   <li>The Noun Project for icons. Detailed credits on the way</li>
-                  <li><a href='https://github.com/doshea/nyt_crosswords' id='github-link'>Doshea @ Github</a> for the JSON archive of past NY Times Crossword puzzles and answers</li>
+                  <li><a href='https://github.com/doshea/nyt_crosswords' className='attribution' id='github-link'>Doshea @ Github</a> for the JSON archive of past NY Times Crossword puzzles and answers</li>
                 </ul>
               </div>
             )}/>

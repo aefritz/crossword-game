@@ -70,7 +70,6 @@ class Gameboard extends Component {
 
   startSavedGame(data) {
     let timer = window.setInterval(()=>{
-      console.log('bleep');
       document.querySelector('#timer').innerText = (parseInt(document.querySelector('#timer').innerText) + 1) + "s";
     },1000);
     this.setState({
@@ -81,23 +80,9 @@ class Gameboard extends Component {
   }
 
 
-  /*async componentWillReceiveProps(nextProps) {
-    console.log(this.props);
-    console.log(nextProps);
-    console.log('fired');
-    if (this.props.data !== nextProps.data) {
-      await this.setState(prevState => ({
-        ...prevState,
-        data: nextProps.data,
-        accessToken: nextProps.accessToken
-      }));
-      this.startGame();
-    }
-  }*/
-
   componentWillUnmount() {
-        window.clearInterval(this.state.timer);
-    }
+    window.clearInterval(this.state.timer);
+  }
 
 
   async startGame() {
@@ -145,7 +130,6 @@ class Gameboard extends Component {
         let regExpAttempt = new RegExp(regExpAttemptStr, 'i');
         let potentialMatches = this.state.data.filter(word => word.answer.match(regExpAttempt));
         if (potentialMatches.length > 0) {
-          console.log(potentialMatches);
           const indx = Math.floor(potentialMatches.length*Math.random());
           across2 = potentialMatches[indx].answer;
           match_found = true;
@@ -158,13 +142,11 @@ class Gameboard extends Component {
       }
     }
     let wordArray = [across1, across2, across3, down1, down2, down3];
-    console.log(wordArray);
     let definitionArray = wordArray.map((word) => {
       let entry = this.state.data.filter(blah => blah.answer === word)[0];
       return entry.clue;
     });
     let timer = window.setInterval(()=>{
-      console.log('bleep');
       document.querySelector('#timer').innerText = (parseInt(document.querySelector('#timer').innerText) + 1) + "s";
     },1000);
     this.setState(prevState => ({
@@ -203,11 +185,9 @@ class Gameboard extends Component {
 
   async handleChange(ev) {
     const {value} = ev.target;
-    console.log(value);
     let winStatus;
     const x = parseInt(ev.target.dataset.x);
     const y = parseInt(ev.target.dataset.y);
-    console.log(x,y,value);
     const positions = this.state.positions;
     positions[y][x].letter = value;
     this.setState(prevState => ({
@@ -216,22 +196,17 @@ class Gameboard extends Component {
     if (value.length !== 0) {
       if (this.state.toggleDirection === 'down') {
         let nextPosition = (y + 1) % 5;
-        console.log(nextPosition);
         let node = document.querySelectorAll(`input[data-x = '${x}'][data-y = '${nextPosition}']`);
-        console.log(node)
         document.querySelector(`input[data-x = '${x}'][data-y = '${nextPosition}']`).focus();
       }
       if (this.state.toggleDirection === 'across') {
         let nextPosition = (x + 1) % 5;
-        console.log(nextPosition);
         let node = document.querySelectorAll(`input[data-x = '${x}'][data-y = '${nextPosition}']`);
-        console.log(node)
         document.querySelector(`input[data-x = '${nextPosition}'][data-y = '${y}']`).focus();
       }
     }
     if (this.state.positions.every(a => a.every(b => b.letter.toUpperCase() === b.answer))) {
       window.clearInterval(this.state.timer);
-      console.log('winner');
       let game_time = parseInt(document.querySelector('#timer').innerText);
       this.setState(prevState => ({
         ...prevState,
@@ -243,7 +218,6 @@ class Gameboard extends Component {
       if (this.state.saved_game_id !== null) {
         await deleteGame(this.state.saved_game_id, this.state.accessToken);
       }
-      console.log(this.state.accessToken);
       await updateUser({time: game_time}, this.state.accessToken);
     }
   }
@@ -261,7 +235,6 @@ class Gameboard extends Component {
   }
 
   handleClick(ev) {
-    console.log(ev.target);
     let direction;
     let x = ev.target.dataset.x;
     let y = ev.target.dataset.y;
@@ -287,11 +260,9 @@ class Gameboard extends Component {
         currentDefinition: this.state.words.across[selector].definition
       }))
     } else if (((x === "0") || (x === "2") || ( x=== "4")) && ((y === "0") || (y === "2") || (y === "4"))  && this.state.toggleDirection === 'down') {
-      console.log('triggered');
       document.querySelectorAll(`[data-y = '${y}']`).forEach(element => element.className = 'rowHighlight');
       const selector = parseInt(y)/2;
       console.log(this.state.words.across[selector]);
-      console.log(this.state.words.across[selector].definition);
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'across',
@@ -327,14 +298,11 @@ class Gameboard extends Component {
         puzzle: words,
         usersPositions: positions
       }, this.state.accessToken);
-      console.log(resp);
     } else if (this.state.saved_game_id !== null) {
-      console.log(this.state.saved_game_id);
       resp = await reSaveGame(this.state.saved_game_id, {
         puzzle: words,
         usersPositions: positions
       }, this.state.accessToken);
-      console.log(resp);
     }
     this.setState(prevState => ({
       ...prevState,
@@ -478,7 +446,9 @@ class Gameboard extends Component {
           <p id='timer'>0</p>
           <div className='clueContainer'>
             <p className='clueHeader'>Clue:</p>
-            <p className='clue'>{this.state.currentDefinition} </p>
+            <div className='clueContainer2'>
+              <p className='clue'>{this.state.currentDefinition} </p>
+            </div>
           </div>
           {
           (this.state.win && this.state.showMsg) && (<div className='winMessage' onClick={this.turnOffMsg}>

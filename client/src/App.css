@@ -116,10 +116,14 @@ input > .space {
 }
 .landingImage {
   width: 20%;
+  min-width: 300px;
+  height: auto;
   margin: 0 auto;
 }
 .facebookLogin {
   width: 15%;
+  min-width: 200px;
+  height: auto;
   margin-top: 15px;
 }
 .landingPage {
@@ -194,6 +198,10 @@ button {
   margin-bottom: 10px;
   border: 2px solid black;
 }
+button:hover {
+  background: black;
+  color: #EFF0D1;
+}
 .clueHeader {
   font-weight: 700;
 }
@@ -222,6 +230,17 @@ ul {
 #github-link {
   color: black;
 }
+.clueContainer2 {
+  padding: 10px;
+}
+li {
+  font-size: 0.7em;
+}
+.attribution {
+  font-size: 0.7em;
+  padding: 0px;
+  margin: 0;
+}
 @media screen and (max-width: 643px) {
   .userViewContainer{
     flex-flow: column;
@@ -233,8 +252,48 @@ ul {
   }
   h3 {
     text-align: center;
+    font-size: 0.9em;
+    margin: .5em auto;
+  }
+  h4 {
+    font-size: 0.7em;
+    margin-top: 0.4em auto;
+  }
+  a {
+    margin: 10px;
+    font-size: 15px;
+  }
+  button {
+    font-size: 15px;
   }
   .userView2 {
     width: 90%;
+  }
+  .profileImage {
+    width: 70%;
+  }
+  .space {
+    width: 40px;
+    font-size: 20px;
+    height: 40px;
+  }
+  .selected {
+    width: 40px;
+    font-size: 20px;
+    height: 40px;
+  }
+  .rowHighlight {
+    width: 40px;
+    font-size: 20px;
+    height: 40px;
+  }
+  .dark_space {
+    width: 40px;
+    height: 40px;
+  }
+  .container {
+    width: 225px;
+    height: 225px;
+    margin-right: 10px;
   }
 }
