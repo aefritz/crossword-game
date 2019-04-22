@@ -454,7 +454,7 @@ class Gameboard extends Component {
             </div>
           </div>
           {
-          (this.state.win && this.state.showMsg) && (<div className='winMessage' onClick={this.turnOffMsg}>
+          (this.state.win && this.state.showMsg) && (<div className='modalMessage' onClick={this.turnOffMsg}>
                 <h3 onClick={this.turnOffMsg}>Congratulations</h3>
                 <h3>You finished in {this.state.game_time} seconds</h3>
                 <h6>Share on Facebook</h6>
@@ -462,7 +462,7 @@ class Gameboard extends Component {
               </div>)
             }
             {
-            (this.state.loading) && (<div className='winMessage'>
+            (this.state.loading) && (<div className='modalMessage'>
                   <h3>Loading</h3>
                   <h3>Please wait</h3>
                 </div>)

@@ -24,6 +24,7 @@ class User extends Component {
       accessToken: props.accessToken,
       imageURL: props.imageURL,
       currentUser: null,
+      loading: true,
       savedGames: []
     }
     this.handleDelete = this.handleDelete.bind(this);
@@ -49,7 +50,8 @@ class User extends Component {
       accessToken: token,
       propicURL: propicURL.data.url,
       currentUser: user.data,
-      savedGames: savedGames.data
+      savedGames: savedGames.data,
+      loading: false
     });
   }
 
@@ -84,6 +86,12 @@ class User extends Component {
         {(this.state.savedGames.length === 0) ? <h5><i>You have no saved games.</i></h5> : null}
           </div>
       </div>
+      {
+      (this.state.loading) && (<div className='modalMessage'>
+            <h3>Loading</h3>
+            <h3>Please wait</h3>
+          </div>)
+        }
 
     </div>
   )

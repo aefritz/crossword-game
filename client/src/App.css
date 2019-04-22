@@ -99,7 +99,7 @@ input > .space {
 #timer {
   margin-top: 0px;
 }
-.winMessage {
+.modalMessage {
   position: fixed;
   top: 0;
   left: 0;
