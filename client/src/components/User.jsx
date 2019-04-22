@@ -31,7 +31,6 @@ class User extends Component {
 
   async handleDelete(id) {
     let resp = await deleteGame(id, this.state.accessToken);
-    console.log(resp);
     this.setState(prevState => ({
       ...prevState,
       savedGames: prevState.savedGames.filter(game => game.id !== id)
@@ -43,12 +42,9 @@ class User extends Component {
     if (localStorage.getItem('crossword-app-token') || this.state.accessToken === '') {
       token = JSON.parse(localStorage.getItem('crossword-app-token'));
     }
-    console.log(token);
     let propicURL = await getUserProPic(token);
-    console.log(propicURL)
     let savedGames = await getSavedGames(token);
     let user = await getUser(token);
-    console.log(savedGames);
     this.setState({
       accessToken: token,
       propicURL: propicURL.data.url,

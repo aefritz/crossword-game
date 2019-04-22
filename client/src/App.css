@@ -218,7 +218,7 @@ footer {
   color: #EFF0D1;
 }
 ul {
-  width: 30%;
+  width: 80%;
   margin: 0 auto;
   text-align: left;
   margin-top: 10px;
@@ -234,10 +234,10 @@ ul {
   padding: 10px;
 }
 li {
-  font-size: 0.7em;
+  font-size: 1.0em;
 }
 .attribution {
-  font-size: 0.7em;
+  font-size: 1.0em;
   padding: 0px;
   margin: 0;
 }

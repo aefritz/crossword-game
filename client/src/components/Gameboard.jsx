@@ -35,6 +35,7 @@ class Gameboard extends Component {
       win: false,
       timer: null,
       showMsg: false,
+      loading: true,
       game_time: 0,
       saved_game_id: (props.id !== undefined) ? props.id : null,
       positions: [
@@ -75,7 +76,8 @@ class Gameboard extends Component {
     this.setState({
       timer: timer,
       words: JSON.parse(data.puzzle),
-      positions: JSON.parse(data.usersPositions)
+      positions: JSON.parse(data.usersPositions),
+      loading: false
     })
   }
 
@@ -102,8 +104,8 @@ class Gameboard extends Component {
     while (finished === false) {
       let oneMatchForEach = false;
       while (oneMatchForEach === false) {
-        across1 = this.state.data[Math.floor(10000*Math.random())].answer;
-        across3 = this.state.data[Math.floor(10000*Math.random())].answer;
+        across1 = this.state.data[Math.floor(5000*Math.random())].answer;
+        across3 = this.state.data[Math.floor(5000*Math.random())].answer;
         let regExp1 = this.convertStrInfoToRegex(across1[0], across3[0]);
         let regExp2 = this.convertStrInfoToRegex(across1[2], across3[2]);
         let regExp3 = this.convertStrInfoToRegex(across1[4], across3[4]);
@@ -152,6 +154,7 @@ class Gameboard extends Component {
     this.setState(prevState => ({
       ...prevState,
       timer: timer,
+      loading: false,
       words: {across: [
           {word: wordArray[0],
           definition: definitionArray[0]},
@@ -244,7 +247,7 @@ class Gameboard extends Component {
     if (((x === "0") || ( x === "2") || ( x === "4")) && this.state.toggleDirection === '') {
       document.querySelectorAll(`[data-x = '${x}']`).forEach(element => element.className = 'rowHighlight');
       const selector = parseInt(x)/2;
-      console.log(this.state.words.down[selector]);
+      console.log(this.state.words.down[selector].word);
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'down',
@@ -253,7 +256,7 @@ class Gameboard extends Component {
     } else if (((x === "1") || (x === "3"))) {
       document.querySelectorAll(`[data-y = '${y}']`).forEach(element => element.className = 'rowHighlight');
       const selector = parseInt(y)/2;
-      console.log(this.state.words.across[selector]);
+      console.log(this.state.words.across[selector].word);
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'across',
@@ -262,7 +265,7 @@ class Gameboard extends Component {
     } else if (((x === "0") || (x === "2") || ( x=== "4")) && ((y === "0") || (y === "2") || (y === "4"))  && this.state.toggleDirection === 'down') {
       document.querySelectorAll(`[data-y = '${y}']`).forEach(element => element.className = 'rowHighlight');
       const selector = parseInt(y)/2;
-      console.log(this.state.words.across[selector]);
+      console.log(this.state.words.across[selector].word);
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'across',
@@ -271,7 +274,7 @@ class Gameboard extends Component {
     } else if (((x === "0") || (x === "2") || ( x=== "4")) && ((y === "0") || (y === "2") || (y === "4")) && this.state.toggleDirection === 'across') {
       document.querySelectorAll(`[data-x = '${x}']`).forEach(element => element.className = 'rowHighlight');
       const selector = parseInt(x)/2;
-      console.log(this.state.words.down[selector]);
+      console.log(this.state.words.down[selector].word);
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'down',
@@ -280,7 +283,7 @@ class Gameboard extends Component {
     } else if (((x === "0") || (x === "2") || ( x=== "4")) && ((y === "1") || (y === "3"))) {
       document.querySelectorAll(`[data-x = '${x}']`).forEach(element => element.className = 'rowHighlight');
       const selector = parseInt(x)/2;
-      console.log(this.state.words.down[selector]);
+      console.log(this.state.words.down[selector].word);
       this.setState(prevState => ({
         ...prevState,
         toggleDirection: 'down',
@@ -458,6 +461,12 @@ class Gameboard extends Component {
                 <FacebookShareButton children={<FacebookIcon/>} url="https://timesxwordthrowback.surge.sh" quote={`I finished a puzzle in ${this.state.game_time} seconds`}/>
               </div>)
             }
+            {
+            (this.state.loading) && (<div className='winMessage'>
+                  <h3>Loading</h3>
+                  <h3>Please wait</h3>
+                </div>)
+              }
         </div>
 
       </div>
