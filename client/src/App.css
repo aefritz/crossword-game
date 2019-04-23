@@ -3,65 +3,72 @@
 * {
   font-family: 'Roboto Slab', serif;
 }
-.App {
-  text-align: center;
-  background: linear-gradient(to left, #EFF0D1, #CDD0B0);
-  height: 100vh;
+a {
+  text-decoration: none;
+  margin: 25px;
+  font-size: 20px;
+  color: #EFF0D1;
 }
-.clueContainer {
-  border-radius: 10px;
-  border: 1px solid black;
-  margin-top: 10px;
+a:visited {
+  text-decoration: none
 }
-.container {
-  margin: 0 auto;
-  width: 335px;
-  height: 335px;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0px;
-}
-#timer {
-  margin: 10px 0;
-}
-.space {
-  margin: 0px;
-  font-size: 30px;
-  width: 60px;
-  height: 60px;
-  border-radius: 5%;
+button {
+  background: none;
+  font-size: 20px;
+  border-radius: 5px;
+  margin-bottom: 10px;
   border: 2px solid black;
-  text-align: center;
-  font-family: 'Nanum Pen Script', cursive;
 }
-.selected {
-  margin: 0px;
-  font-size: 30px;
-  width: 60px;
-  height: 60px;
-  border-radius: 5%;
-  border: 2px solid black;
-  background: yellow;
-  text-align: center;
-  font-family: 'Nanum Pen Script', cursive;
+button:hover {
+  background: black;
+  color: #EFF0D1;
 }
-.rowHighlight {
-  margin: 0px;
-  width: 60px;
-  font-size: 30px;
-  height: 60px;
-  border-radius: 5%;
-  border: 2px solid black;
-  background: blue;
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: black;
   text-align: center;
-  font-family: 'Nanum Pen Script', cursive;
+  font-size: 10px;
+  color: #EFF0D1;
+}
+h3 {
+  text-align: center;
 }
 main {
   height: auto;
   background: linear-gradient(to left, #EFF0D1, #CDD0B0);
 }
-h3 {
+li {
+  font-size: 1.0em;
+}
+nav {
+  background: black;
+  width: 100%;
+  color: #EFF0D1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: 900;
+}
+p {
+  margin: 0;
+}
+ul {
+  width: 80%;
+  margin: 0 auto;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 80px;
+}
+.App {
   text-align: center;
+  background: linear-gradient(to left, #EFF0D1, #CDD0B0);
+  height: 100vh;
+}
+.attribution {
+  font-size: 1.0em;
+  padding: 0px;
+  margin: 0;
 }
 .clue {
   margin-top: 0px;
@@ -71,8 +78,27 @@ h3 {
   word-wrap: normal;
   overflow: scroll;
 }
-.mainContainer {
+.clueContainer {
+  border-radius: 10px;
+  border: 1px solid black;
+  margin-top: 10px;
+}
+.clueContainer2 {
+  padding: 10px;
+}
+.clueHeader {
+  font-weight: 700;
+}
+.container {
+  margin: 0 auto;
   width: 335px;
+  height: 335px;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0px;
+}
+.crosswordIcon {
+  width: 50px;
 }
 .dark_space {
   margin: 0px;
@@ -82,8 +108,15 @@ h3 {
   border: 2px solid black;
   background: black;
 }
-input > .space {
-  font-size: 28px;
+.deleteIcon {
+  width: 20px;
+  height: 20px;
+}
+.facebookLogin {
+  width: 15%;
+  min-width: 200px;
+  height: auto;
+  margin-top: 15px;
 }
 .gameContainer {
   width: 75%;
@@ -92,12 +125,26 @@ input > .space {
   justify-content: center;
   font-family: 'Nanum Pen Script', cursive;
 }
+#github-link {
+  color: black;
+}
 .imageContainer {
   width: 50%;
   margin: 0 auto;
 }
-#timer {
-  margin-top: 0px;
+.landingImage {
+  width: 20%;
+  min-width: 300px;
+  height: auto;
+  margin: 0 auto;
+}
+.landingPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.mainContainer {
+  width: 335px;
 }
 .modalMessage {
   position: fixed;
@@ -114,36 +161,58 @@ input > .space {
   justify-content: center;
   z-index: 8;
 }
-.landingImage {
-  width: 20%;
-  min-width: 300px;
-  height: auto;
-  margin: 0 auto;
-}
-.facebookLogin {
-  width: 15%;
-  min-width: 200px;
-  height: auto;
-  margin-top: 15px;
-}
-.landingPage {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 .profileImage {
   width: 100%;
   border-radius: 100%;
 }
-.userViewContainer {
-  margin: 30px auto;
-  width: 75%;
-  border: 1px solid black;
-  height: auto;
+.rowHighlight {
+  margin: 0px;
+  width: 60px;
+  font-size: 30px;
+  height: 60px;
+  border-radius: 5%;
+  border: 2px solid black;
+  background: blue;
+  text-align: center;
+  font-family: 'Nanum Pen Script', cursive;
+}
+.savedGame {
   display: flex;
-  justify-content: space-around;
-  text-align: left;
-  padding: 20px;
+}
+.savedGamesList {
+  display: flex;
+  flex-wrap: wrap;
+}
+.selected {
+  margin: 0px;
+  font-size: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 5%;
+  border: 2px solid black;
+  background: yellow;
+  text-align: center;
+  font-family: 'Nanum Pen Script', cursive;
+}
+.space {
+  margin: 0px;
+  font-size: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 5%;
+  border: 2px solid black;
+  text-align: center;
+  font-family: 'Nanum Pen Script', cursive;
+}
+input > .space {
+  font-size: 28px;
+}
+.thanks {
+  margin: 40px;
+}
+#timer {
+  margin: 0px;
+  margin-bottom: 10px;
 }
 .userView1 {
   padding: 15px;
@@ -160,95 +229,26 @@ input > .space {
   border: 1px solid black;
   overflow: scroll;
 }
-.savedGamesList {
+.userViewContainer {
+  margin: 30px auto;
+  width: 75%;
+  border: 1px solid black;
+  height: auto;
   display: flex;
-  flex-wrap: wrap;
-}
-.crosswordIcon {
-  width: 50px;
-}
-.savedGame {
-  display: flex;
-}
-.deleteIcon {
-  width: 20px;
-  height: 20px;
-}
-p {
-  margin: 0;
-}
-nav {
-  background: black;
-  width: 100%;
-  color: #EFF0D1;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-weight: 900;
-}
-a {
-  text-decoration: none;
-  margin: 25px;
-  font-size: 20px;
-  color: #EFF0D1;
-}
-button {
-  background: none;
-  font-size: 20px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  border: 2px solid black;
-}
-button:hover {
-  background: black;
-  color: #EFF0D1;
-}
-.clueHeader {
-  font-weight: 700;
-}
-a:visited {
-  text-decoration: none
-}
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: black;
-  text-align: center;
-  font-size: 10px;
-  color: #EFF0D1;
-}
-ul {
-  width: 80%;
-  margin: 0 auto;
+  justify-content: space-around;
   text-align: left;
-  margin-top: 10px;
-  margin-bottom: 80px;
-}
-.thanks {
-  margin: 40px;
-}
-#github-link {
-  color: black;
-}
-.clueContainer2 {
-  padding: 10px;
-}
-li {
-  font-size: 1.0em;
-}
-.attribution {
-  font-size: 1.0em;
-  padding: 0px;
-  margin: 0;
+  padding: 20px;
 }
 @media screen and (max-width: 643px) {
   .userViewContainer{
     flex-flow: column;
   }
-  .userView1 {
-    width: 90%;
-    margin-bottom: 20px;
-    align-items: flex-start;
+  a {
+    margin: 10px;
+    font-size: 15px;
+  }
+  button {
+    font-size: 15px;
   }
   h3 {
     text-align: center;
@@ -259,20 +259,19 @@ li {
     font-size: 0.7em;
     margin-top: 0.4em auto;
   }
-  a {
-    margin: 10px;
-    font-size: 15px;
+  .container {
+    width: 225px;
+    height: 225px;
+    margin-right: 10px;
   }
-  button {
-    font-size: 15px;
-  }
-  .userView2 {
-    width: 90%;
+  .dark_space {
+    width: 40px;
+    height: 40px;
   }
   .profileImage {
     width: 70%;
   }
-  .space {
+  .rowHighlight {
     width: 40px;
     font-size: 20px;
     height: 40px;
@@ -282,18 +281,20 @@ li {
     font-size: 20px;
     height: 40px;
   }
-  .rowHighlight {
+  .space {
     width: 40px;
     font-size: 20px;
     height: 40px;
   }
-  .dark_space {
-    width: 40px;
-    height: 40px;
+  .userView1 {
+    width: 90%;
+    margin-bottom: 20px;
+    align-items: flex-start;
   }
-  .container {
-    width: 225px;
-    height: 225px;
-    margin-right: 10px;
+  .userView2 {
+    width: 90%;
+  }
+  .userViewContainer{
+    flex-flow: column;
   }
 }
