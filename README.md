@@ -1,37 +1,34 @@
+## Deployed Site
+
+[https://timesxwordthrowback.surge.sh](https://timesxwordthrowback.surge.sh)
+
 ## Description
 
-This app generates NY Times-style mini crossword puzzles. Users log in with their Facebook accounts and can save and share their performance on Facebook with their friends.
+TimesXWordThrowback generates NY Times-style mini crossword puzzles that reuse previous clue-answer pairs from the NY Times crossword. Users log in with their Facebook accounts and can save and share their performance on Facebook with their friends.
 
 ## MVP
 
 - Users log in with Facebook
-- The app generates Times-style mini (5x5) crosswords using Oxford English Dictionary API and Words API.
-- User's performance is tracked. (time and no of puzzles solved)
+- The app generates Times-style mini (5x5) crosswords using past NY Times crossword clues
+- User's performance is tracked. (time and no. of puzzles solved)
 - Users can save progress
 - Users can share to Facebook
 
-## Important Technologies
+## Technologies
 - React
 - Express
-- FB development kit for Node.js
-- query-string for Node.js (used in OAuth login flow to extract code from redirect)
-- Canvas (I hope to use Canvas to take screenshots of finished games for users to share with their friends)
-- RegExp for searching word APIs and puzzle creation
+- PostgreSQL
+- Facebook SDK for Node.js
+- query-string: Node module used in OAuth login flow to extract code from redirect)
+- RegExp: used for matching clue-answer pairs to fill the puzzleboard
+- JSON: for importing clue-answer pairs and storing saved games
 
 ## Post-MVP
 
 - Option to log in without Facebook... or option to log in with other platforms.
-- Integrating clues from previous NY Times Crosswords. There is no API but there is a JSON database -- I would need to think about how to unpack all of the data. The other problem with Times questions is that some/many are self-referential.
-- Optimizing generation performance - this algorithm might be complicated and I might have to settle for less than ideal results given the complexity and the timeframe. However, I like this challenge of the project.
-- Attempting the backend in Ruby (I would like to see this in action)
+- More flexible gameboard configuration ... right now there are always three 'down' words and
+three 'across' words in the same positions. I would like to be able to render new configurations.
 
-## Timeline
-
-- Monday: Backend framework as validated by Facebook / Game logic
-- Tuesday: game logic and puzzleboard interactivity
-- Wednesday: Puzzleboard interactivity
-- Thursday: Styling
-- Friday: Styling
 
 ## ERD
 
