@@ -8,7 +8,7 @@ TimesXWordThrowback generates NY Times-style mini crossword puzzles that reuse p
 
 ## Acknowledgements
 
-Thanks to [https://github.com/doshea/nyt_crosswords](Doshea @ Github) for the JSON archive of past NY Times Crossword puzzles and answers.
+Thanks to [Doshea @ Github](https://github.com/doshea/nyt_crosswords) for the JSON archive of past NY Times Crossword puzzles and answers.
 
 ## MVP
 
