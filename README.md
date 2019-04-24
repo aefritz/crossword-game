@@ -6,6 +6,10 @@
 
 TimesXWordThrowback generates NY Times-style mini crossword puzzles that reuse previous clue-answer pairs from the NY Times crossword. Users log in with their Facebook accounts and can save and share their performance on Facebook with their friends.
 
+## Acknowledgements
+
+Thanks to [https://github.com/doshea/nyt_crosswords](Doshea @ Github) for the JSON archive of past NY Times Crossword puzzles and answers.
+
 ## MVP
 
 - Users log in with Facebook
@@ -19,7 +23,7 @@ TimesXWordThrowback generates NY Times-style mini crossword puzzles that reuse p
 - Express
 - PostgreSQL
 - Facebook SDK for Node.js
-- query-string: Node module used in OAuth login flow to extract code from redirect)
+- query-string: Node module used in OAuth login flow to extract code from redirect
 - RegExp: used for matching clue-answer pairs to fill the puzzleboard
 - JSON: for importing clue-answer pairs and storing saved games
 
