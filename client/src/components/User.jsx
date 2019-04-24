@@ -24,18 +24,10 @@ class User extends Component {
       accessToken: props.accessToken,
       imageURL: props.imageURL,
       currentUser: null,
-      loading: true,
+      loading: true, //determines whether 'loading' screen renders
       savedGames: []
     }
     this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  async handleDelete(id) {
-    let resp = await deleteGame(id, this.state.accessToken);
-    this.setState(prevState => ({
-      ...prevState,
-      savedGames: prevState.savedGames.filter(game => game.id !== id)
-    }));
   }
 
   async componentDidMount() {
@@ -43,9 +35,9 @@ class User extends Component {
     if (localStorage.getItem('crossword-app-token') || this.state.accessToken === '') {
       token = JSON.parse(localStorage.getItem('crossword-app-token'));
     }
-    let propicURL = await getUserProPic(token);
+    let propicURL = await getUserProPic(token); //get profile picture from Facebook
     let savedGames = await getSavedGames(token);
-    let user = await getUser(token);
+    let user = await getUser(token); //get user's info from database
     this.setState({
       accessToken: token,
       propicURL: propicURL.data.url,
@@ -55,6 +47,14 @@ class User extends Component {
     });
   }
 
+  //makes database call when user chooses to get rid of a saved game
+  async handleDelete(id) {
+    let resp = await deleteGame(id, this.state.accessToken);
+    this.setState(prevState => ({
+      ...prevState,
+      savedGames: prevState.savedGames.filter(game => game.id !== id)
+    }));
+  }
 
   render () {
   return (

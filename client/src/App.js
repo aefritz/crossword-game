@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import {Route, Link, Redirect, withRouter} from 'react-router-dom';
-import {getWordList} from './services/oxfordApi';
 import {Facebook, FacebookApiException} from 'fb';
 import CrosswordAnimation from './components/CrosswordAnimation.gif';
 import FacebookLogin from './components/FacebookLogin.png';
-import queryString from 'query-string';
-import './App.css';
 import LoginFlow from './components/LoginFlow';
 import User from './components/User';
 import Gameboard from './components/Gameboard';
+import queryString from 'query-string';
+import './App.css';
 import {getUser, createUser, getUserProPic, getSavedGames} from './services';
-import dotenv from'dotenv'
+import dotenv from 'dotenv';
 let config = dotenv.config();
 let appid = process.env.REACT_APP_APP_ID;
 let appsecret = process.env.REACT_APP_APP_SECRET;
 
-
+//instantiates new Facebook object with app info
 const fb = new Facebook();
 const options = fb.options({
   appId: appid,
@@ -36,7 +35,6 @@ class App extends Component {
       token_set: false,
       accessToken: "",
       redirectURL: "",
-      expires: "",
       propicURL: "",
       currentUser: null,
       savedGames: null
@@ -45,55 +43,14 @@ class App extends Component {
     this.setToken = this.setToken.bind(this);
   }
 
-  async setToken (token) {
-    let resp = await getUser(token);
-    if (resp.data.msg === 'user not found') {
-      resp = await createUser(token);
-    }
-    this.setState({
-      accessToken: token,
-      token_set: true,
-      currentUser: resp.data,
-    })
-  }
-
-  async exchangeCodeForToken(code, passedFunction) {
-    let token;
-    let expires;
-    await fb.api('oauth/access_token', {
-      redirect_uri: 'https://timesxwordthrowback.surge.sh/login',
-      client_id: appid,
-      client_secret: appsecret,
-      code: code
-    }, async function (res) {
-      if(!res || res.error) {
-        console.log(!res ? 'error occurred' : res.error);
-        return;
-      }
-      token = res.access_token;
-      await fb.setAccessToken(token);
-      localStorage.setItem('crossword-app-token', JSON.stringify(token));
-      passedFunction(token);
-    });
-  }
-
-
-
   async componentDidMount (props) {
-    let token = '';
-    let crossword_data = {};
-    if (localStorage.getItem('crossword-app-data')) {
-      crossword_data = JSON.parse(localStorage.getItem('crossword-app-data'));
-    } else {
-      const resp = await getWordList();
-      crossword_data = resp.data.results;
-      localStorage.setItem('crossword-app-data', JSON.stringify(crossword_data));
-    }
+    //fetches redirect URL for OAuth flow in case user doesn't have a valid token
     let url = await fb.getLoginUrl({
       scope: 'email'
     });
     if (localStorage.getItem('crossword-app-token')) {
-      token = JSON.parse(localStorage.getItem('crossword-app-token'));
+      //checks for token in local storage and uses it to retrieve account info
+      let token = JSON.parse(localStorage.getItem('crossword-app-token'));
       await fb.setAccessToken(token);
       let resp = await getUser(token);
       if (resp.data.msg === 'user not found') {
@@ -116,16 +73,52 @@ class App extends Component {
     }
   }
 
+  /*in this function, callback represents the callback that sets the token into state.
+  The callback used for this function is setToken.*/
+  async exchangeCodeForToken(code, callback) {
+    let token;
+    await fb.api('oauth/access_token', {
+      redirect_uri: 'https://timesxwordthrowback.surge.sh/login',
+      client_id: appid,
+      client_secret: appsecret,
+      code: code
+    }, async function (res) {
+      if(!res || res.error) {
+        console.log(!res ? 'error occurred' : res.error);
+        return;
+      }
+      token = res.access_token;
+      await fb.setAccessToken(token);
+      localStorage.setItem('crossword-app-token', JSON.stringify(token));
+      callback(token);
+    });
+  }
+
+  async setToken (token) {
+    let resp = await getUser(token);
+    if (resp.data.msg === 'user not found') {
+      resp = await createUser(token);
+    }
+    this.setState({
+      accessToken: token,
+      token_set: true,
+      currentUser: resp.data,
+    })
+  }
+
+
   render() {
     return (
       <div className="App">
+
         <main>
 
             <nav>
               <h2>Times-xWord-Throwback</h2>
             </nav>
 
-          {this.state.accessToken && <nav>
+            //the main navigation bar only renders when the user is logged in with an access token
+            {this.state.accessToken && <nav>
               <Link to='/user'>User</Link>
               <Link to='/play'>Play</Link>
               <Link to='/thanks'>Acknowledgements</Link>
@@ -155,6 +148,8 @@ class App extends Component {
             <Route path = '/user' render={(props)=>
               <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL} savedGames={this.state.savedGames}/>}/>
 
+            /*logging out removes access token from state & local storage and then redirects
+            user to the main landing page*/
             <Route path = '/logout' render={(props)=>{
               localStorage.removeItem('crossword-app-token');
               this.setState({
