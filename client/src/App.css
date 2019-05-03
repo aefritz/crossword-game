@@ -118,6 +118,22 @@ ul {
   height: auto;
   margin-top: 15px;
 }
+.facebookF {
+  width: 35px;
+}
+.fb-login-button {
+  margin: 20px auto;
+  width: 270px;
+  height: 40px;
+  background: #4267B2;
+  border-radius: 3px;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  font-size: 20px;
+
+}
 .gameContainer {
   width: 75%;
   margin: 20px auto;
@@ -142,6 +158,17 @@ ul {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.loginText {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
 }
 .mainContainer {
   width: 335px;

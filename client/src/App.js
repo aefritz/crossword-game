@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Route, Link, Redirect, withRouter} from 'react-router-dom';
 import {Facebook, FacebookApiException} from 'fb';
 import CrosswordAnimation from './components/CrosswordAnimation.gif';
-import FacebookLogin from './components/FacebookLogin.png';
+import FacebookF from './components/FacebookF.png';
 import LoginFlow from './components/LoginFlow';
 import User from './components/User';
 import Gameboard from './components/Gameboard';
@@ -59,7 +59,6 @@ class App extends Component {
       let propicURL = await getUserProPic(token);
       let savedGames = await getSavedGames(token);
       this.setState({
-        data: crossword_data,
         redirectURL: url,
         accessToken: token,
         currentUser: resp.data,
@@ -117,7 +116,6 @@ class App extends Component {
               <h2>Times-xWord-Throwback</h2>
             </nav>
 
-            //the main navigation bar only renders when the user is logged in with an access token
             {this.state.accessToken && <nav>
               <Link to='/user'>User</Link>
               <Link to='/play'>Play</Link>
@@ -127,7 +125,7 @@ class App extends Component {
 
             <Route exact path = '/' render={(props) => (
               <div className="landingPage">
-                <Link to='/login'><img src={FacebookLogin} className="facebookLogin"/></Link>
+                <div className="fb-login-button" onClick={()=>this.props.history.push('/login')}><div className="logoContainer"><img src={FacebookF} className="facebookF"/></div><div className="loginText">Login with Facebook</div></div>
                 <img src={CrosswordAnimation} className="landingImage"/>
                 </div>
             )}/>
@@ -148,8 +146,7 @@ class App extends Component {
             <Route path = '/user' render={(props)=>
               <User accessToken={this.state.accessToken} currentUser={this.state.currentUser} propicURL={this.state.propicURL} savedGames={this.state.savedGames}/>}/>
 
-            /*logging out removes access token from state & local storage and then redirects
-            user to the main landing page*/
+
             <Route path = '/logout' render={(props)=>{
               localStorage.removeItem('crossword-app-token');
               this.setState({

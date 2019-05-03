@@ -1,16 +1,15 @@
 {
-  "main.css": "/static/css/main.323b87f2.chunk.css",
-  "main.js": "/static/js/main.58d8b49b.chunk.js",
-  "main.js.map": "/static/js/main.58d8b49b.chunk.js.map",
+  "main.css": "/static/css/main.9a1dd083.chunk.css",
+  "main.js": "/static/js/main.dd7c6058.chunk.js",
+  "main.js.map": "/static/js/main.dd7c6058.chunk.js.map",
   "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
   "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-  "static/js/2.42a8b079.chunk.js": "/static/js/2.42a8b079.chunk.js",
-  "static/js/2.42a8b079.chunk.js.map": "/static/js/2.42a8b079.chunk.js.map",
+  "static/js/2.4956f99b.chunk.js": "/static/js/2.4956f99b.chunk.js",
+  "static/js/2.4956f99b.chunk.js.map": "/static/js/2.4956f99b.chunk.js.map",
   "index.html": "/index.html",
-  "precache-manifest.cbbfa9788826421b698c3bb321217d99.js": "/precache-manifest.cbbfa9788826421b698c3bb321217d99.js",
+  "precache-manifest.030dc8f2e766e874c1cf378688c3c925.js": "/precache-manifest.030dc8f2e766e874c1cf378688c3c925.js",
   "service-worker.js": "/service-worker.js",
-  "static/css/main.323b87f2.chunk.css.map": "/static/css/main.323b87f2.chunk.css.map",
+  "static/css/main.9a1dd083.chunk.css.map": "/static/css/main.9a1dd083.chunk.css.map",
   "static/media/CrosswordAnimation.gif": "/static/media/CrosswordAnimation.d59eaa83.gif",
-  "static/media/Delete.png": "/static/media/Delete.aa12e5b5.png",
-  "static/media/FacebookLogin.png": "/static/media/FacebookLogin.208daff2.png"
+  "static/media/Delete.png": "/static/media/Delete.aa12e5b5.png"
 }
