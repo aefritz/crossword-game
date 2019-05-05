@@ -14,9 +14,14 @@ function LoginFlow (props) {
   OAuth code, then parse the URL for the code and exchange it for a valid token*/
     let {code} = queryString.parse(props.location.search);
     exchangeCodeForToken(code, setToken);
-    return (<div></div>)
+    return(
+      <div className='modalMessage'>
+        <h3>Loading</h3>
+        <h3>Please wait</h3>
+      </div>
+      )
   } else {
-    /*if the user has a token then take them to the user page*/ 
+    /*if the user has a token then take them to the user page*/
     return (<Redirect to="/user"/>)
   }
 }
